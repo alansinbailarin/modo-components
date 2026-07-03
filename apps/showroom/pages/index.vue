@@ -408,6 +408,29 @@ function navigateToGithub() {
           </Button>
         </div>
 
+        <!-- Product Hunt badge -->
+        <a
+          href="https://www.producthunt.com/products/mood-ui?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-mood-ui"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="pt-1"
+        >
+          <img
+            alt="Mood UI - The Vue 3 component library built to ship fast. | Product Hunt"
+            width="250"
+            height="54"
+            class="dark:hidden"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1186747&theme=light&t=1783046555507"
+          />
+          <img
+            alt="Mood UI - The Vue 3 component library built to ship fast. | Product Hunt"
+            width="250"
+            height="54"
+            class="hidden dark:block"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1186747&theme=dark&t=1783046555507"
+          />
+        </a>
+
         <!-- micro feature line -->
         <div
           class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4 text-xs text-muted-foreground"

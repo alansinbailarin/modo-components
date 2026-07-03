@@ -128,8 +128,32 @@ function go(id: string) {
         </ul>
       </div>
 
-      <!-- Pinned footer: npm + issue link -->
+      <!-- Pinned footer: Product Hunt + npm + issue link -->
       <div class="flex flex-col gap-3 shrink-0">
+        <!-- Product Hunt badge -->
+        <a
+          href="https://www.producthunt.com/products/mood-ui?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-mood-ui"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            alt="Mood UI - The Vue 3 component library built to ship fast. | Product Hunt"
+            width="250"
+            height="54"
+            loading="lazy"
+            class="w-full h-auto dark:hidden"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1186747&theme=light&t=1783046555507"
+          />
+          <img
+            alt="Mood UI - The Vue 3 component library built to ship fast. | Product Hunt"
+            width="250"
+            height="54"
+            loading="lazy"
+            class="w-full h-auto hidden dark:block"
+            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=1186747&theme=dark&t=1783046555507"
+          />
+        </a>
+
         <!-- npm weekly downloads -->
         <a
           href="https://www.npmjs.com/package/mood-ui"
