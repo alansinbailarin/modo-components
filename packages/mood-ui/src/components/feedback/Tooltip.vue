@@ -226,11 +226,15 @@ interface Pos {
 const position = ref<Pos>({ top: 0, left: 0, placement: props.placement });
 
 function measure() {
-  const trigger = triggerRef.value;
   const panel = panelRef.value;
-  if (!trigger || !panel) return;
+  if (!panel) return;
 
-  const tRect = trigger.getBoundingClientRect();
+  // Anchor mode: position against a virtual point instead of the trigger box.
+  const a = props.anchor;
+  const tRect: DOMRect = a
+    ? ({ top: a.y, bottom: a.y, left: a.x, right: a.x, width: 0, height: 0, x: a.x, y: a.y, toJSON() { return this; } } as DOMRect)
+    : (triggerRef.value?.getBoundingClientRect() as DOMRect);
+  if (!tRect) return;
   // Usar offsetWidth/Height (ignoran el transform de la transición scale).
   const panelW = panel.offsetWidth;
   const panelH = panel.offsetHeight;
@@ -379,6 +383,13 @@ const arrowStyle = computed(() => {
 function onScrollOrResize() {
   if (isOpen.value) measure();
 }
+
+// Anchor mode: reposition as the virtual point moves (e.g. chart hover).
+watch(
+  () => props.anchor,
+  () => { if (isOpen.value) measure(); },
+  { deep: true },
+);
 
 let resizeObserver: ResizeObserver | null = null;
 

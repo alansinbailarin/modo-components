@@ -41,8 +41,17 @@ export interface Tooltip {
     /** Deshabilitado — no se abre. */ 
     disabled?: boolean; 
  
-    /** v-model:open — permite controlarlo externamente (trigger='manual'). */ 
-    open?: boolean; 
+    /** v-model:open — permite controlarlo externamente (trigger='manual'). */
+    open?: boolean;
+
+    /**
+     * Virtual anchor: a viewport point `{ x, y }` (client coordinates) to
+     * position the tooltip against instead of the wrapped trigger element.
+     * Combine with a controlled `open` to drive a tooltip that follows a moving
+     * target — e.g. the hovered data point of a chart, or a cursor. The default
+     * slot can be empty in this mode. Re-positions whenever the point changes.
+     */
+    anchor?: { x: number; y: number } | null;
  
     /** Ancho máximo en px. @default 260 */ 
     maxWidth?: number; 
