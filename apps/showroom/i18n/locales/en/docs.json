@@ -163,6 +163,27 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.11.0": {
+            "title": "Charts, MenuButton & a unified focus ring",
+            "items": [
+              "New: Chart — one component for sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap (pick the renderer with the type prop). Pure SVG, colorblind-safe palette, built-in hover crosshair + tooltip.",
+              "New: MenuButton — a menu-trigger button that drops into a ButtonGroup as a segment.",
+              "New: SearchInput results dropdown — pass :items for a grouped, keyboard-navigable results popover.",
+              "New: Stat #chart slot — embed a Chart for a KPI card, or omit label/value for a chart-only tile. Stat now composes Card.",
+              "New: Button as=\"a\" renders a real anchor element (href / target / rel) with an accessible disabled state.",
+              "Improved: one consistent focus ring across every control; fixed the full-radius halo bleed; equal control heights per size.",
+              "Improved: Tooltip gains a virtual-anchor mode (follows a moving point); Topbar now shares the sidebar surface."
+            ]
+          },
+          "v0.10.0": {
+            "title": "Unified size scale",
+            "items": [
+              "New: central SIZE_TOKENS + useSizeTokens resolver — every control reads shared size tokens.",
+              "Improved: Button anchors the size scale with fixed control heights; inputs, selects, date & multi controls, selection controls, Segmented, Tabs, Pagination and Avatar all align per size.",
+              "Improved: the size prop was widened to ModoSize across the library.",
+              "Fixed: tree-shakeable build so optional peer dependencies are truly optional."
+            ]
+          },
           "v0.9.3": {
             "title": "DateTimeField timeOnly mode",
             "items": [

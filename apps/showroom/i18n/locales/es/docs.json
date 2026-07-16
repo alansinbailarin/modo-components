@@ -163,6 +163,27 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.11.0": {
+            "title": "Gráficas, MenuButton y un focus ring unificado",
+            "items": [
+              "Nuevo: Chart — un componente para sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar y heatmap (elige el renderer con el prop type). Puro SVG, paleta apta para daltonismo, crosshair + tooltip de hover integrados.",
+              "Nuevo: MenuButton — un botón que abre menú y entra en un ButtonGroup como segmento.",
+              "Nuevo: dropdown de resultados en SearchInput — pasa :items para un popover de resultados agrupado y navegable por teclado.",
+              "Nuevo: slot #chart en Stat — incrusta un Chart para una tarjeta KPI, u omite label/value para una tarjeta solo-gráfica. Stat ahora compone Card.",
+              "Nuevo: Button as=\"a\" renderiza un elemento ancla real (href / target / rel) con estado deshabilitado accesible.",
+              "Mejora: un focus ring consistente en todos los controles; corregido el bleed del radio completo; alturas de control iguales por tamaño.",
+              "Mejora: Tooltip con modo anchor virtual (sigue un punto en movimiento); el Topbar ahora comparte la superficie del sidebar."
+            ]
+          },
+          "v0.10.0": {
+            "title": "Escala de tamaños unificada",
+            "items": [
+              "Nuevo: SIZE_TOKENS central + resolver useSizeTokens — cada control lee tokens de tamaño compartidos.",
+              "Mejora: Button ancla la escala de tamaños con alturas de control fijas; inputs, selects, controles de fecha y múltiples, controles de selección, Segmented, Tabs, Pagination y Avatar se alinean por tamaño.",
+              "Mejora: el prop size se amplió a ModoSize en toda la librería.",
+              "Corregido: build tree-shakeable para que las dependencias peer opcionales sean realmente opcionales."
+            ]
+          },
           "v0.9.3": {
             "title": "Modo timeOnly en DateTimeField",
             "items": [
