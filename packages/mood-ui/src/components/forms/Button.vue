@@ -10,10 +10,16 @@
     :fullWidth="fullWidth"
   />
 
-  <button
+  <component
+    :is="rootTag"
     v-else
-    :type="type"
-    :disabled="isDisabled || loading"
+    :type="isLink ? undefined : type"
+    :href="linkHref"
+    :target="isLink ? target : undefined"
+    :rel="isLink ? rel : undefined"
+    :disabled="isLink ? undefined : isDisabled || loading"
+    :aria-disabled="isLink && isEffectivelyDisabled ? 'true' : undefined"
+    :tabindex="isLink && isEffectivelyDisabled ? -1 : undefined"
     :aria-busy="loading || undefined"
     :aria-label="resolvedAriaLabel"
     :class="[
@@ -24,6 +30,9 @@
       sizeClasses,
       radiusClasses,
       fullWidth ? 'w-full' : '',
+      isLink && isEffectivelyDisabled
+        ? 'opacity-40 pointer-events-none cursor-not-allowed'
+        : '',
     ]"
   >
     <Loader
@@ -53,7 +62,7 @@
       v-if="icon && !loading && iconPosition === 'right'"
       :class="iconSizeClasses"
     />
-  </button>
+  </component>
 </template>
 
 <script setup lang="ts">
@@ -89,10 +98,23 @@ const props = withDefaults(defineProps<Button>(), {
   color: "default",
   gradient: false,
   type: "button",
+  as: "button",
   fullWidth: false,
   iconPosition: "left",
   skeleton: false,
 });
+
+// Render as a real anchor when `as="a"` (navigation links). A `<button>` can't
+// carry `href`, and an `<a>` can't carry `type`/`disabled` — so we swap the root
+// tag and route the tag-specific attributes accordingly.
+const isLink = computed(() => props.as === "a");
+const isEffectivelyDisabled = computed(() => isDisabled.value || props.loading);
+const rootTag = computed(() => (isLink.value ? "a" : "button"));
+// A disabled link drops its href (so it isn't navigable) and relies on
+// aria-disabled + pointer-events-none for the disabled affordance.
+const linkHref = computed(() =>
+  isLink.value && !isEffectivelyDisabled.value ? props.href : undefined,
+);
 
 const variant = computed(
   () => (groupProps.variant as Button["variant"]) ?? props.variant,
@@ -280,7 +302,8 @@ const iconSizeClasses = computed(() => sz.value.icon);
 </script>
 
 <style scoped>
-button {
+button,
+a {
   transition-property:
     background-color, border-color, color, box-shadow, --tw-ring-color,
     --tw-ring-shadow;
@@ -288,7 +311,8 @@ button {
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 }
 @media (prefers-reduced-motion: reduce) {
-  button {
+  button,
+  a {
     transition: none;
   }
 }
