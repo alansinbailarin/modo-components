@@ -105,6 +105,7 @@ export {
 /* ------------------------------------------------------------------ */
 export { default as Button } from "./components/forms/Button.vue";
 export { default as ButtonGroup } from "./components/forms/ButtonGroup.vue";
+export { default as MenuButton } from "./components/forms/MenuButton.vue";
 export { default as FormField } from "./components/forms/FormField.vue";
 export { default as Input } from "./components/forms/Input.vue";
 export { default as Textarea } from "./components/forms/Textarea.vue";
@@ -195,6 +196,7 @@ export { default as Kbd } from "./components/data-display/Kbd.vue";
 export { default as Code } from "./components/data-display/Code.vue";
 export { default as Accordion } from "./components/data-display/Accordion.vue";
 export { default as Stat } from "./components/data-display/Stat.vue";
+export { default as Chart } from "./components/data-display/Chart.vue";
 export { default as Timeline } from "./components/data-display/Timeline.vue";
 
 /* ------------------------------------------------------------------ */
@@ -228,6 +230,7 @@ export { default as TablePagination } from "./components/data-display/table/Tabl
 export type * from "./interfaces/forms/Button.interface";
 export type * from "./interfaces/forms/FormField.interface";
 export type * from "./interfaces/forms/ButtonGroup.interface";
+export type * from "./interfaces/forms/MenuButton.interface";
 export type * from "./interfaces/forms/Input.interface";
 export type * from "./interfaces/forms/Textarea.interface";
 export type * from "./interfaces/forms/PasswordInput.interface";
@@ -286,6 +289,7 @@ export type * from "./interfaces/data-display/Kbd.interface";
 export type * from "./interfaces/data-display/Code.interface";
 export type * from "./interfaces/data-display/Accordion.interface";
 export type * from "./interfaces/data-display/Stat.interface";
+export type * from "./interfaces/data-display/Chart.interface";
 export type * from "./interfaces/data-display/Timeline.interface";
 export type * from "./interfaces/data-display/avatar/Avatar.interface";
 export type * from "./interfaces/data-display/avatar/AvatarGroup.interface";
