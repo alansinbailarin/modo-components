@@ -408,6 +408,17 @@ function navigateToGithub() {
           </Button>
         </div>
 
+        <!-- GitHub Sponsors -->
+        <iframe
+          src="https://github.com/sponsors/alansinbailarin/button"
+          title="Sponsor alansinbailarin"
+          height="32"
+          width="114"
+          loading="lazy"
+          class="pt-1"
+          style="border: 0; border-radius: 6px"
+        ></iframe>
+
         <!-- Product Hunt badge -->
         <a
           href="https://www.producthunt.com/products/mood-ui?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-mood-ui"

@@ -128,8 +128,18 @@ function go(id: string) {
         </ul>
       </div>
 
-      <!-- Pinned footer: Product Hunt + npm + issue link -->
+      <!-- Pinned footer: GitHub Sponsors + Product Hunt + npm + issue link -->
       <div class="flex flex-col gap-3 shrink-0">
+        <!-- GitHub Sponsors -->
+        <iframe
+          src="https://github.com/sponsors/alansinbailarin/button"
+          title="Sponsor alansinbailarin"
+          height="32"
+          width="114"
+          loading="lazy"
+          style="border: 0; border-radius: 6px"
+        ></iframe>
+
         <!-- Product Hunt badge -->
         <a
           href="https://www.producthunt.com/products/mood-ui?embed=true&utm_source=badge-featured&utm_medium=badge&utm_campaign=badge-mood-ui"
