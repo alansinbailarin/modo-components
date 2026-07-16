@@ -21,10 +21,10 @@
                 <header
                     v-if="$slots.topbar"
                     :class="[
-                        'w-full shrink-0 bg-background',
+                        'w-full shrink-0 bg-card',
                         divider ? 'border-b border-border' : '',
                         stickyTopbar && !isContained
-                            ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85'
+                            ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-card/85'
                             : '',
                     ]"
                 >
@@ -170,7 +170,7 @@
                 <footer
                     v-if="$slots.footer"
                     :class="[
-                        'w-full shrink-0 bg-background',
+                        'w-full shrink-0 bg-card',
                         divider ? 'border-t border-border' : '',
                     ]"
                 >
@@ -190,7 +190,7 @@
                     <aside
                         v-if="hasRail"
                         :class="[
-                            'hidden shrink-0 bg-card flex-col',
+                            'relative z-40 hidden shrink-0 bg-card flex-col',
                             desktopFlexClass,
                             railWidthClass,
                             railBorderClass,
@@ -217,7 +217,7 @@
                     <aside
                         v-if="variant === 'standard' && $slots.sidebar"
                         :class="[
-                            'hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
+                            'relative z-40 hidden shrink-0 bg-card flex-col transition-[width] duration-base ease-standard',
                             desktopFlexClass,
                             standardSidebarWidthClass,
                             sidebarBorderClass,
@@ -260,10 +260,10 @@
                         <header
                             v-if="$slots.topbar"
                             :class="[
-                                'w-full shrink-0 bg-background',
+                                'w-full shrink-0 bg-card',
                                 divider ? 'border-b border-border' : '',
                                 stickyTopbar && !isContained
-                                    ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85'
+                                    ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-card/85'
                                     : '',
                             ]"
                         >
@@ -333,7 +333,7 @@
                         <footer
                             v-if="$slots.footer"
                             :class="[
-                                'w-full shrink-0 bg-background',
+                                'w-full shrink-0 bg-card',
                                 divider ? 'border-t border-border' : '',
                             ]"
                         >

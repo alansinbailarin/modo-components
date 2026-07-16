@@ -5,16 +5,30 @@
         :aria-label="ariaLabel ?? 'Sidebar'"
         role="navigation"
     >
-        <!-- HEADER --> 
-        <div 
-            v-if="$slots.header" 
-            :class="[ 
-                'shrink-0', 
-                dividers ? 'border-b border-border' : '', 
-            ]" 
-        > 
-            <slot name="header" :collapsed="collapsed" /> 
-        </div> 
+        <!-- HEADER -->
+        <div
+            v-if="$slots.header"
+            :class="[
+                'relative shrink-0',
+                dividers ? 'border-b border-border' : '',
+            ]"
+        >
+            <slot name="header" :collapsed="collapsed" />
+
+            <!-- Collapse toggle: vertically centered on the header so it lines
+                 up with a Switcher / brand placed in the header slot. -->
+            <button
+                v-if="showToggle"
+                type="button"
+                data-modo-sidebar-toggle
+                :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
+                :class="['absolute top-1/2 -translate-y-1/2', toggleButtonClass]"
+                @click="$emit('update:collapsed', !collapsed)"
+            >
+                <ChevronLeftIcon v-if="!collapsed" class="size-3.5" />
+                <ChevronRightIcon v-else class="size-3.5" />
+            </button>
+        </div>
  
         <!-- BODY --> 
         <div 
@@ -85,20 +99,13 @@
             <slot name="footer" :collapsed="collapsed" /> 
         </div>
 
-        <!-- COLLAPSE TOGGLE -->
+        <!-- COLLAPSE TOGGLE (no header: anchored near the top edge) -->
         <button
-            v-if="showToggle"
+            v-if="showToggle && !$slots.header"
             type="button"
             data-modo-sidebar-toggle
             :aria-label="collapsed ? 'Expand sidebar' : 'Collapse sidebar'"
-            :class="[
-                'absolute top-[16px] z-10 size-6 rounded-full',
-                'border border-border bg-card shadow-sm',
-                'flex items-center justify-center',
-                'text-muted-foreground hover:text-foreground',
-                'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                togglePositionClass,
-            ]"
+            :class="['absolute top-[16px]', toggleButtonClass]"
             @click="$emit('update:collapsed', !collapsed)"
         >
             <ChevronLeftIcon v-if="!collapsed" class="size-3.5" />
@@ -159,6 +166,18 @@ const paddingClass = computed(() => {
 const togglePositionClass = computed(() =>
     props.toggleSide === 'start' ? '-left-3' : '-right-3',
 );
+
+// Shared look for the collapse toggle. Vertical anchoring differs by placement
+// (centered on the header slot, or near the top edge when there is no header),
+// so those classes are applied at the call site instead.
+const toggleButtonClass = computed(() => [
+    'z-20 size-6 rounded-full',
+    'border border-border bg-card shadow-sm',
+    'flex items-center justify-center cursor-pointer',
+    'text-muted-foreground hover:text-foreground',
+    'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+    togglePositionClass.value,
+]);
 
 function onSelect(item: SidebarItem) { 
     if (item.disabled) return; 

@@ -2,7 +2,7 @@
     <component 
         :is="as" 
         :class="[ 
-            'w-full bg-background text-foreground', 
+            'w-full bg-card text-foreground',
             stickyClasses, 
             divider ? 'border-b border-border' : '', 
         ]" 
@@ -173,7 +173,7 @@ const buttonSize = computed<'small' | 'medium'>(() =>
  
 const stickyClasses = computed(() => 
     props.sticky 
-        ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-background/85' 
+        ? 'sticky top-0 z-30 backdrop-blur supports-[backdrop-filter]:bg-card/85'
         : '', 
 ); 
 </script>
