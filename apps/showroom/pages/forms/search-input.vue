@@ -2,6 +2,12 @@
 import { ref, computed } from "vue";
 import { SearchInput, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
+import {
+  HomeIcon,
+  Cog6ToothIcon,
+  UserIcon,
+  DocumentTextIcon,
+} from "@heroicons/vue/24/outline";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import ComponentPreview from "~/components/ComponentPreview.vue";
 import CodePreview from "~/components/CodePreview.vue";
@@ -177,8 +183,66 @@ const query = ref('vue');
 const exBasic = ref("");
 const exDebounce = ref("");
 
-const typesCode = `export interface SearchInput {
+// Results dropdown example — host-owned filtering fed into :items
+const allResults = [
+  { id: "dash", label: "Dashboard", group: "Go to", icon: HomeIcon, shortcut: "⌘D" },
+  { id: "settings", label: "Settings", group: "Go to", icon: Cog6ToothIcon },
+  { id: "ana", label: "Ana López", description: "ana@acme.com", group: "Clients", icon: UserIcon },
+  { id: "bruno", label: "Bruno Díaz", description: "bruno@beta.io", group: "Clients", icon: UserIcon },
+  { id: "inv", label: "Invoice #1042", description: "Paid · $2,300", group: "Records", icon: DocumentTextIcon },
+];
+const exResultsQuery = ref("");
+const exResults = computed(() => {
+  const q = exResultsQuery.value.trim().toLowerCase();
+  if (!q) return allResults;
+  return allResults.filter(
+    (r) => r.label.toLowerCase().includes(q) || (r.description ?? "").toLowerCase().includes(q),
+  );
+});
+
+const resultsCode = `<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { SearchInput } from 'mood-ui';
+
+const query = ref('');
+const all = [
+  { label: 'Dashboard', group: 'Go to', shortcut: '⌘D' },
+  { label: 'Ana López', description: 'ana@acme.com', group: 'Clients' },
+  // …
+];
+const items = computed(() =>
+  all.filter((r) => r.label.toLowerCase().includes(query.value.toLowerCase())),
+);
+<\/script>
+
+<template>
+  <SearchInput
+    v-model="query"
+    :items="items"
+    empty-text="No matches"
+    placeholder="Search people & pages…"
+    @select="(item) => console.log(item.label)"
+  />
+</template>`;
+
+const typesCode = `interface SearchResultItem {
+  id?: string | number;
+  label: string;
+  description?: string;
+  icon?: Component;
+  group?: string;      // consecutive items share one header
+  shortcut?: string;
+  href?: string;
+  external?: boolean;
+  disabled?: boolean;
+}
+
+export interface SearchInput {
   modelValue?: string | null;
+  items?: SearchResultItem[];   // renders a results popover under the field
+  open?: boolean;               // v-model:open
+  emptyText?: string;
+  resultsPlacement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
   label?: string;
   placeholder?: string;
   helperText?: string;
@@ -209,6 +273,22 @@ const propsList = computed<PropDoc[]>(() => [
     name: "modelValue",
     type: "string | null",
     description: t("pages.forms.searchInput.props.modelValue"),
+  },
+  {
+    name: "items",
+    type: "SearchResultItem[]",
+    description: t("pages.forms.searchInput.props.items"),
+  },
+  {
+    name: "emptyText",
+    type: "string",
+    description: t("pages.forms.searchInput.props.emptyText"),
+  },
+  {
+    name: "resultsPlacement",
+    type: "'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'",
+    default: "'bottom-start'",
+    description: t("pages.forms.searchInput.props.resultsPlacement"),
   },
   {
     name: "label",
@@ -365,6 +445,11 @@ const emitsList = computed<EmitDoc[]>(() => [
     payload: "string",
     description: t("pages.forms.searchInput.emits.search"),
   },
+  {
+    name: "select",
+    payload: "SearchResultItem",
+    description: t("pages.forms.searchInput.emits.select"),
+  },
 ]);
 </script>
 
@@ -443,6 +528,21 @@ const emitsList = computed<EmitDoc[]>(() => [
 
     <!-- ── Examples ────────────────────────────────────────────────────── -->
     <template #examples>
+      <ComponentPreview
+        :title="t('pages.forms.searchInput.examples.results.title')"
+        :description="t('pages.forms.searchInput.examples.results.desc')"
+        :code="resultsCode"
+      >
+        <SearchInput
+          v-model="exResultsQuery"
+          :items="exResults"
+          empty-text="No matches"
+          :placeholder="t('pages.forms.searchInput.examples.results.ph')"
+          ariaLabel="Search"
+          style="width: 340px"
+        />
+      </ComponentPreview>
+
       <ComponentPreview
         :title="t('pages.forms.searchInput.examples.basic.title')"
         :description="t('pages.forms.searchInput.examples.basic.desc')"

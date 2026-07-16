@@ -498,6 +498,27 @@
         "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu in their default closed state — the portal mounts only on user interaction.",
         "ssgWhyMost": "Why most are SSR-safe",
         "ssgWhyMostText": "The lib uses Vue 3 SSR-safe patterns internally: setup() never reads window or document at top level; every DOM access lives inside onMounted hooks or event handlers. The compiled HTML is identical between server and first client paint."
+      },
+      "llms": {
+        "overline": "Documentation",
+        "title": "LLMs & AI",
+        "subtitle": "mood-ui publishes machine-readable docs at /llms.txt and /llms-full.txt so AI coding assistants generate correct, up-to-date mood-ui code.",
+        "filesTitle": "Two files",
+        "shortName": "/llms.txt",
+        "shortDesc": "A short index — every component and composable with a one-line summary and a deep link into the full reference. Ideal as a lightweight map you keep in context.",
+        "fullName": "/llms-full.txt",
+        "fullDesc": "The full reference — installation, ModoProvider setup, theming and philosophy, then every component and composable with complete prop tables and TypeScript types.",
+        "howTitle": "How to use them",
+        "step1Title": "Point your AI assistant at the URL",
+        "step1Desc": "In Cursor, Claude Code, Copilot or any chat, add the file to the model context (or paste the URL). The assistant then knows mood-ui’s exact API and stops inventing props.",
+        "step2Title": "Or drop it in your prompt",
+        "step2Desc": "Add a one-line instruction so the model always consults the reference before writing UI code.",
+        "step3Title": "Fetch it programmatically",
+        "step3Desc": "Both files are plain text served from the site root — pipe them into any tool or pre-load them into your own agent.",
+        "syncTitle": "Always in sync",
+        "syncDesc": "Both files are generated from the library’s public exports and TypeScript interfaces on every build, so they always match the version you install — never a stale, hand-written doc.",
+        "openShort": "Open llms.txt",
+        "openFull": "Open llms-full.txt"
       }
     }
   }

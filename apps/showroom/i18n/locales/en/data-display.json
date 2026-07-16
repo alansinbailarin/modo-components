@@ -831,6 +831,10 @@
           "grid": {
             "title": "Metrics grid",
             "desc": "Four Stat cards in a grid simulating a dashboard."
+          },
+          "chart": {
+            "title": "With a chart",
+            "desc": "Drop any Chart into the #chart slot — a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
           }
         },
         "types": {
@@ -1180,6 +1184,51 @@
           "kbShiftTab": "Move focus to the previous focusable element",
           "ariaLabel": "Provides an accessible name for the week view",
           "focusNative": "Focus is managed by the week view; use Tab to navigate events and actions"
+        }
+      },
+      "chart": {
+        "title": "Chart",
+        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG — responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
+        "controls": {
+          "type": "Type",
+          "stacked": "Stacked",
+          "legend": "Legend",
+          "grid": "Grid",
+          "curve": "Curve"
+        },
+        "examples": {
+          "lines": {
+            "title": "Lines & areas",
+            "desc": "Single or multi-series, with a smooth / linear / step curve and an optional gradient fill + colored glow."
+          },
+          "bars": {
+            "title": "Bars",
+            "desc": "Single, grouped or stacked. Add a reference line for a target or threshold."
+          },
+          "scatter": {
+            "title": "Scatter & sparkline",
+            "desc": "Plot raw points, or drop a compact sparkline inline with no axes."
+          },
+          "polar": {
+            "title": "Donut, pie & gauge",
+            "desc": "Proportions as a donut or pie, a single ratio as a 270° gauge, or progress rings (radial)."
+          },
+          "radar": {
+            "title": "Radar",
+            "desc": "Compare several series across shared axes — great for skill and spec profiles."
+          },
+          "heatmap": {
+            "title": "Heatmap",
+            "desc": "A matrix of magnitudes on a sequential single-hue scale. Optionally print each cell value."
+          },
+          "stat": {
+            "title": "Inside a Stat",
+            "desc": "Pass a Chart into a Stat’s #chart slot for a KPI card with a trend visual."
+          }
+        },
+        "types": {
+          "title": "Types & data shapes",
+          "desc": "The full set of chart types and the polymorphic data each one accepts."
         }
       }
     },
@@ -1938,6 +1987,10 @@
           "grid": {
             "title": "Metrics grid",
             "desc": "Four Stat cards in a grid simulating a dashboard."
+          },
+          "chart": {
+            "title": "With a chart",
+            "desc": "Drop any Chart into the #chart slot — a sparkline for a KPI card, or a full chart with no label/value for a chart-only tile."
           }
         }
       },
@@ -2240,6 +2293,51 @@
             "title": "Business hours",
             "desc": "Highlights business hours and limits the visible time range."
           }
+        }
+      },
+      "chart": {
+        "title": "Chart",
+        "description": "One component for every chart: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar and heatmap. Pure SVG — responsive, themeable with a colorblind-safe palette, and interactive with a built-in hover crosshair + tooltip.",
+        "controls": {
+          "type": "Type",
+          "stacked": "Stacked",
+          "legend": "Legend",
+          "grid": "Grid",
+          "curve": "Curve"
+        },
+        "examples": {
+          "lines": {
+            "title": "Lines & areas",
+            "desc": "Single or multi-series, with a smooth / linear / step curve and an optional gradient fill + colored glow."
+          },
+          "bars": {
+            "title": "Bars",
+            "desc": "Single, grouped or stacked. Add a reference line for a target or threshold."
+          },
+          "scatter": {
+            "title": "Scatter & sparkline",
+            "desc": "Plot raw points, or drop a compact sparkline inline with no axes."
+          },
+          "polar": {
+            "title": "Donut, pie & gauge",
+            "desc": "Proportions as a donut or pie, a single ratio as a 270° gauge, or progress rings (radial)."
+          },
+          "radar": {
+            "title": "Radar",
+            "desc": "Compare several series across shared axes — great for skill and spec profiles."
+          },
+          "heatmap": {
+            "title": "Heatmap",
+            "desc": "A matrix of magnitudes on a sequential single-hue scale. Optionally print each cell value."
+          },
+          "stat": {
+            "title": "Inside a Stat",
+            "desc": "Pass a Chart into a Stat’s #chart slot for a KPI card with a trend visual."
+          }
+        },
+        "types": {
+          "title": "Types & data shapes",
+          "desc": "The full set of chart types and the polymorphic data each one accepts."
         }
       }
     }

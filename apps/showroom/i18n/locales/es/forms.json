@@ -2030,6 +2030,11 @@
             "title": "Loading",
             "desc": "Muestra spinner en lugar del botón clear durante la búsqueda.",
             "ph": "Buscando…"
+          },
+          "results": {
+            "title": "Dropdown de resultados",
+            "desc": "Pasa un arreglo items filtrado para renderizar un popover de resultados agrupados bajo el campo, con navegación por teclado y tooltip compartido. El filtrado / async lo controlas tú vía el evento search.",
+            "ph": "Buscar personas y páginas…"
           }
         },
         "props": {
@@ -2055,7 +2060,10 @@
           "name": "Atributo name HTML.",
           "id": "id del input. Se autogenera si se omite.",
           "autofocus": "Foco automático al montar.",
-          "ariaLabel": "Nombre accesible cuando no hay label visible."
+          "ariaLabel": "Nombre accesible cuando no hay label visible.",
+          "items": "Resultados a mostrar en un dropdown bajo el input. Proveerlo (aunque sea []) renderiza el popover de resultados.",
+          "emptyText": "Texto de estado vacío cuando items es [].",
+          "resultsPlacement": "Ubicación del popover de resultados."
         },
         "emits": {
           "updateModelValue": "Emitido en cada cambio del valor (sincroniza v-model).",
@@ -2063,7 +2071,8 @@
           "focus": "Emitido cuando el input recibe foco.",
           "blur": "Emitido cuando el input pierde foco.",
           "clear": "Emitido al pulsar el botón de limpiar.",
-          "search": "Emitido al pulsar Enter o tras el tiempo de debounce."
+          "search": "Emitido al pulsar Enter o tras el tiempo de debounce.",
+          "select": "Se eligió un resultado (clic o Enter)."
         },
         "types": {
           "title": "SearchInput",
@@ -2627,6 +2636,33 @@
           "ariaLabel": "Proporciona un nombre accesible cuando no hay etiqueta visible",
           "focusNative": "Usa un elemento textarea nativo — participa en el orden de tabulación por defecto",
           "focusResize": "El handle de redimensionamiento manual es una característica del navegador y no interfiere con la navegación por teclado"
+        }
+      },
+      "menuButton": {
+        "title": "MenuButton",
+        "description": "Un botón que abre un menú al hacer clic. Su raíz en el DOM es el botón trigger, así que entra directo en un ButtonGroup como segmento — hereda variant, size y radius del grupo y colapsa sus bordes — y también funciona por sí solo.",
+        "controls": {
+          "variant": "Variante",
+          "size": "Tamaño",
+          "chevron": "Chevron"
+        },
+        "examples": {
+          "basic": {
+            "title": "Básico",
+            "desc": "Pasa un arreglo items — el mismo modelo que DropdownMenu (items, divisores, encabezados)."
+          },
+          "group": {
+            "title": "En un ButtonGroup",
+            "desc": "Colócalo junto a botones como segmento de menú; los bordes colapsan como cualquier miembro del grupo."
+          },
+          "icon": {
+            "title": "Trigger de solo icono",
+            "desc": "Omite el label para un trigger compacto. Provee un ariaLabel para accesibilidad."
+          },
+          "rich": {
+            "title": "Menú enriquecido",
+            "desc": "Encabezados, divisores, atajos, descripciones e items destructivos (danger)."
+          }
         }
       }
     }

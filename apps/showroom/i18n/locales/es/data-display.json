@@ -831,6 +831,10 @@
           "grid": {
             "title": "Grilla de métricas",
             "desc": "Cuatro cards Stat en una grilla simulando un dashboard."
+          },
+          "chart": {
+            "title": "Con gráfica",
+            "desc": "Coloca cualquier Chart en el slot #chart — un sparkline para una tarjeta KPI, o una gráfica completa sin label/value para una tarjeta solo-gráfica."
           }
         },
         "types": {
@@ -1180,6 +1184,51 @@
           "kbShiftTab": "Mueve el foco al elemento enfocable anterior",
           "ariaLabel": "Proporciona un nombre accesible para la vista de semana",
           "focusNative": "El foco es gestionado por la vista de semana; usa Tab para navegar eventos y acciones"
+        }
+      },
+      "chart": {
+        "title": "Chart",
+        "description": "Un componente para toda gráfica: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar y heatmap. Puro SVG — responsivo, tematizable con una paleta apta para daltonismo, e interactivo con crosshair + tooltip de hover integrados.",
+        "controls": {
+          "type": "Tipo",
+          "stacked": "Apilado",
+          "legend": "Leyenda",
+          "grid": "Cuadrícula",
+          "curve": "Curva"
+        },
+        "examples": {
+          "lines": {
+            "title": "Líneas y áreas",
+            "desc": "Una o varias series, con curva smooth / linear / step y un relleno con gradiente + glow de color opcional."
+          },
+          "bars": {
+            "title": "Barras",
+            "desc": "Simples, agrupadas o apiladas. Agrega una línea de referencia para un objetivo o umbral."
+          },
+          "scatter": {
+            "title": "Scatter y sparkline",
+            "desc": "Grafica puntos crudos, o coloca un sparkline compacto en línea sin ejes."
+          },
+          "polar": {
+            "title": "Donut, pie y gauge",
+            "desc": "Proporciones como donut o pie, una sola razón como gauge de 270°, o anillos de progreso (radial)."
+          },
+          "radar": {
+            "title": "Radar",
+            "desc": "Compara varias series sobre ejes compartidos — ideal para perfiles de skills o specs."
+          },
+          "heatmap": {
+            "title": "Heatmap",
+            "desc": "Una matriz de magnitudes en una escala secuencial de un solo tono. Opcionalmente muestra el valor de cada celda."
+          },
+          "stat": {
+            "title": "Dentro de un Stat",
+            "desc": "Pasa un Chart al slot #chart de un Stat para una tarjeta KPI con visual de tendencia."
+          }
+        },
+        "types": {
+          "title": "Tipos y formas de datos",
+          "desc": "El conjunto completo de tipos de gráfica y los datos polimórficos que acepta cada uno."
         }
       }
     },
@@ -1938,6 +1987,10 @@
           "grid": {
             "title": "Grid de métricas",
             "desc": "Cuatro Stat en un grid simulando un dashboard."
+          },
+          "chart": {
+            "title": "Con gráfica",
+            "desc": "Coloca cualquier Chart en el slot #chart — un sparkline para una tarjeta KPI, o una gráfica completa sin label/value para una tarjeta solo-gráfica."
           }
         }
       },
@@ -2240,6 +2293,51 @@
             "title": "Horario laboral",
             "desc": "Resalta el horario laboral y limita el rango de horas visible."
           }
+        }
+      },
+      "chart": {
+        "title": "Chart",
+        "description": "Un componente para toda gráfica: sparkline, line, area, bar, scatter, donut, pie, gauge, radial, radar y heatmap. Puro SVG — responsivo, tematizable con una paleta apta para daltonismo, e interactivo con crosshair + tooltip de hover integrados.",
+        "controls": {
+          "type": "Tipo",
+          "stacked": "Apilado",
+          "legend": "Leyenda",
+          "grid": "Cuadrícula",
+          "curve": "Curva"
+        },
+        "examples": {
+          "lines": {
+            "title": "Líneas y áreas",
+            "desc": "Una o varias series, con curva smooth / linear / step y un relleno con gradiente + glow de color opcional."
+          },
+          "bars": {
+            "title": "Barras",
+            "desc": "Simples, agrupadas o apiladas. Agrega una línea de referencia para un objetivo o umbral."
+          },
+          "scatter": {
+            "title": "Scatter y sparkline",
+            "desc": "Grafica puntos crudos, o coloca un sparkline compacto en línea sin ejes."
+          },
+          "polar": {
+            "title": "Donut, pie y gauge",
+            "desc": "Proporciones como donut o pie, una sola razón como gauge de 270°, o anillos de progreso (radial)."
+          },
+          "radar": {
+            "title": "Radar",
+            "desc": "Compara varias series sobre ejes compartidos — ideal para perfiles de skills o specs."
+          },
+          "heatmap": {
+            "title": "Heatmap",
+            "desc": "Una matriz de magnitudes en una escala secuencial de un solo tono. Opcionalmente muestra el valor de cada celda."
+          },
+          "stat": {
+            "title": "Dentro de un Stat",
+            "desc": "Pasa un Chart al slot #chart de un Stat para una tarjeta KPI con visual de tendencia."
+          }
+        },
+        "types": {
+          "title": "Tipos y formas de datos",
+          "desc": "El conjunto completo de tipos de gráfica y los datos polimórficos que acepta cada uno."
         }
       }
     }

@@ -2030,6 +2030,11 @@
             "title": "Loading",
             "desc": "Shows a spinner instead of the clear button while searching.",
             "ph": "Searching…"
+          },
+          "results": {
+            "title": "Results dropdown",
+            "desc": "Feed a filtered items array to render a grouped results popover under the field, with keyboard navigation and a shared tooltip. Filtering / async is up to you via the search event.",
+            "ph": "Search people & pages…"
           }
         },
         "props": {
@@ -2055,7 +2060,10 @@
           "name": "HTML name attribute.",
           "id": "Input id. Auto-generated if omitted.",
           "autofocus": "Auto-focus on mount.",
-          "ariaLabel": "Accessible name when there is no visible label."
+          "ariaLabel": "Accessible name when there is no visible label.",
+          "items": "Results to show in a dropdown under the input. Providing it (even []) renders the results popover.",
+          "emptyText": "Empty-state text shown when items is [].",
+          "resultsPlacement": "Results popover placement."
         },
         "emits": {
           "updateModelValue": "Emitted on every value change (syncs v-model).",
@@ -2063,7 +2071,8 @@
           "focus": "Emitted when the input receives focus.",
           "blur": "Emitted when the input loses focus.",
           "clear": "Emitted when the clear button is clicked.",
-          "search": "Emitted on Enter or after the debounce delay."
+          "search": "Emitted on Enter or after the debounce delay.",
+          "select": "A result item was chosen (click or Enter)."
         },
         "types": {
           "title": "SearchInput",
@@ -2627,6 +2636,33 @@
           "ariaLabel": "Provides an accessible name when no visible label is present",
           "focusNative": "Uses a native textarea element — participates in the tab order by default",
           "focusResize": "Manual resize handle is a browser feature and does not interfere with keyboard navigation"
+        }
+      },
+      "menuButton": {
+        "title": "MenuButton",
+        "description": "A button that opens a menu on click. Its DOM root is the trigger button, so it drops straight into a ButtonGroup as a segment — inheriting the group's variant, size and radius and collapsing its borders — and it works standalone too.",
+        "controls": {
+          "variant": "Variant",
+          "size": "Size",
+          "chevron": "Chevron"
+        },
+        "examples": {
+          "basic": {
+            "title": "Basic",
+            "desc": "Pass an items array — the same model as DropdownMenu (items, dividers, headers)."
+          },
+          "group": {
+            "title": "In a ButtonGroup",
+            "desc": "Drop it beside buttons as a menu segment; borders collapse like any other group member."
+          },
+          "icon": {
+            "title": "Icon-only trigger",
+            "desc": "Omit the label for a compact icon trigger. Provide an ariaLabel for accessibility."
+          },
+          "rich": {
+            "title": "Rich menu",
+            "desc": "Headers, dividers, shortcuts, descriptions and destructive (danger) items."
+          }
         }
       }
     }

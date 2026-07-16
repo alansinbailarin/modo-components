@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Stat, Typography } from "mood-ui";
+import { Stat, Chart, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
 import {
   UsersIcon,
@@ -153,6 +153,32 @@ import { Stat } from 'mood-ui';
   <Stat label="Small"  value="123" size="small"  variant="outlined" :trend="{ value: 5 }" />
   <Stat label="Medium" value="123" size="medium" variant="outlined" :trend="{ value: 5 }" />
   <Stat label="Large"  value="123" size="large"  variant="outlined" :trend="{ value: 5 }" />
+</template>`;
+
+const spark = [12, 18, 9, 22, 16, 28, 24, 31, 26, 34];
+
+const chartCode = `<script setup lang="ts">
+import { Stat, Chart } from 'mood-ui';
+import { BanknotesIcon } from '@heroicons/vue/24/outline';
+
+const data = [12, 18, 9, 22, 16, 28, 24, 31, 26, 34];
+<\/script>
+
+<template>
+  <!-- KPI card with a sparkline -->
+  <Stat label="Revenue" value="$48.5k" :icon="BanknotesIcon"
+    color="primary" :trend="{ value: 12.5 }">
+    <template #chart>
+      <Chart type="sparkline" :data="data" color="primary" show-dot :height="44" />
+    </template>
+  </Stat>
+
+  <!-- Chart-only tile (no value — the chart fills the card) -->
+  <Stat variant="outlined" label="Traffic">
+    <template #chart>
+      <Chart type="sparkline" :data="data" color="chart-3" area :height="80" />
+    </template>
+  </Stat>
 </template>`;
 
 const gridCode = `<script setup lang="ts">
@@ -397,6 +423,31 @@ const propsList = computed<PropDoc[]>(() => [
             variant="outlined"
             :trend="{ value: -1.5, label: '-1.5pp' }"
           />
+        </div>
+      </ComponentPreview>
+
+      <ComponentPreview
+        :title="t('pages.data-display.stat.examples.chart.title')"
+        :description="t('pages.data-display.stat.examples.chart.desc')"
+        :code="chartCode"
+      >
+        <div class="grid sm:grid-cols-2 gap-4 w-full">
+          <Stat
+            label="Revenue"
+            value="$48.5k"
+            :icon="BanknotesIcon"
+            color="primary"
+            :trend="{ value: 12.5 }"
+          >
+            <template #chart>
+              <Chart type="sparkline" :data="spark" color="primary" show-dot :height="44" />
+            </template>
+          </Stat>
+          <Stat variant="outlined" label="Traffic">
+            <template #chart>
+              <Chart type="sparkline" :data="spark" color="chart-3" area :height="80" />
+            </template>
+          </Stat>
         </div>
       </ComponentPreview>
     </template>

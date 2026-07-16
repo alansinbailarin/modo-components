@@ -498,6 +498,27 @@
         "ssgServerSafeText": "Button, Input, Select, Card, Typography, Badge, Chip, Avatar, Stat, Banner, Loader, Skeleton, ProgressBar, Kbd, Code, Divider. Tabs, Accordion, Table (read-only), AppShell. Modal, Drawer, Tooltip, PopoverPanel, DropdownMenu en su estado cerrado default — el portal se monta solo al interactuar.",
         "ssgWhyMost": "Por qué casi todo es SSR-safe",
         "ssgWhyMostText": "La lib usa patrones SSR-safe de Vue 3 internamente: setup() nunca lee window ni document a nivel top; todo acceso al DOM vive dentro de hooks onMounted o event handlers. El HTML compilado es idéntico entre el servidor y el primer paint del cliente."
+      },
+      "llms": {
+        "overline": "Documentación",
+        "title": "LLMs e IA",
+        "subtitle": "mood-ui publica documentación legible por máquinas en /llms.txt y /llms-full.txt para que los asistentes de IA generen código de mood-ui correcto y al día.",
+        "filesTitle": "Dos archivos",
+        "shortName": "/llms.txt",
+        "shortDesc": "Un índice corto — cada componente y composable con un resumen de una línea y un enlace directo a la referencia completa. Ideal como mapa ligero que mantienes en contexto.",
+        "fullName": "/llms-full.txt",
+        "fullDesc": "La referencia completa — instalación, configuración de ModoProvider, theming y filosofía, y luego cada componente y composable con sus tablas de props y tipos de TypeScript.",
+        "howTitle": "Cómo usarlas",
+        "step1Title": "Apunta tu asistente de IA a la URL",
+        "step1Desc": "En Cursor, Claude Code, Copilot o cualquier chat, agrega el archivo al contexto del modelo (o pega la URL). El asistente conocerá la API exacta de mood-ui y dejará de inventar props.",
+        "step2Title": "O ponlo en tu prompt",
+        "step2Desc": "Agrega una instrucción de una línea para que el modelo siempre consulte la referencia antes de escribir código de UI.",
+        "step3Title": "Descárgalas por código",
+        "step3Desc": "Ambos archivos son texto plano servido desde la raíz del sitio — pásalos a cualquier herramienta o pre-cárgalos en tu propio agente.",
+        "syncTitle": "Siempre sincronizadas",
+        "syncDesc": "Ambos archivos se generan desde los exports públicos de la librería y las interfaces de TypeScript en cada build, así que siempre coinciden con la versión que instalas — nunca una doc escrita a mano y desactualizada.",
+        "openShort": "Abrir llms.txt",
+        "openFull": "Abrir llms-full.txt"
       }
     }
   }

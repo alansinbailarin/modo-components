@@ -42,6 +42,7 @@ export const navManifest: NavCategory[] = [
       { id: "theming", label: "Theming", route: "/docs/theming" },
       { id: "i18n", label: "i18n", route: "/docs/i18n" },
       { id: "accessibility", label: "Accessibility", route: "/docs/accessibility" },
+      { id: "llms", label: "LLMs & AI", route: "/docs/llms", badge: "New" },
       { id: "changelog", label: "Changelog", route: "/docs/changelog" },
     ],
   },
@@ -64,6 +65,7 @@ export const navManifest: NavCategory[] = [
     entries: [
       { id: "button", label: "Button", route: "/forms/button" },
       { id: "button-group", label: "ButtonGroup", route: "/forms/button-group" },
+      { id: "menu-button", label: "MenuButton", route: "/forms/menu-button", badge: "New" },
       { id: "form-field", label: "FormField", route: "/forms/form-field", badge: "New" },
       { id: "input", label: "Input", route: "/forms/input" },
       { id: "textarea", label: "Textarea", route: "/forms/textarea" },
@@ -124,6 +126,7 @@ export const navManifest: NavCategory[] = [
       { id: "kbd", label: "Kbd", route: "/data-display/kbd", badge: "New" },
       { id: "code", label: "Code", route: "/data-display/code", badge: "New" },
       { id: "stat", label: "Stat", route: "/data-display/stat", badge: "New" },
+      { id: "chart", label: "Chart", route: "/data-display/chart", badge: "New" },
       { id: "timeline", label: "Timeline", route: "/data-display/timeline", badge: "New" },
       { id: "table", label: "Table", route: "/data-display/table" },
     ],

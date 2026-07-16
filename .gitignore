@@ -49,3 +49,6 @@ apps/showroom/public/llms-full.txt
 
 # Dev-only scratch pages (local visual checks, never committed/deployed)
 apps/showroom/pages/dev-sizes.vue
+apps/showroom/pages/calendar-showcase.vue
+apps/showroom/pages/align-check.vue
+apps/showroom/pages/chart-gallery.vue
