@@ -165,22 +165,6 @@ export const FIELD_AFFORDANCE_ACTION_BY_COLOR: Record<string, string> = {
     warning: 'modo-affordance-action',
 };
  
-const FOCUS_RING_BY_COLOR: Record<string, string> = { 
-    default: 'focus-within:ring-ring/10', 
-    primary: 'focus-within:ring-primary/12', 
-    danger: 'focus-within:ring-destructive/12', 
-    success: 'focus-within:ring-success/12', 
-    warning: 'focus-within:ring-warning/12', 
-}; 
- 
-const FORCED_RING_BY_COLOR: Record<string, string> = { 
-    default: 'ring-ring/10', 
-    primary: 'ring-primary/12', 
-    danger: 'ring-destructive/12', 
-    success: 'ring-success/12', 
-    warning: 'ring-warning/12', 
-}; 
- 
 const FOCUS_BORDER_BY_COLOR: Record<string, string> = { 
     default: 'focus-within:border-foreground/50', 
     primary: 'focus-within:border-primary/60', 
@@ -197,70 +181,77 @@ const FORCED_BORDER_BY_COLOR: Record<string, string> = {
     warning: 'border-warning/60', 
 }; 
  
-/** 
- * Resuelve las clases de wrapper (variante + halo + error) y el radius 
- * para cualquier campo de formulario que siga el patrón Input/Textarea. 
- */ 
-export function useFieldClasses(source: UseFieldClassesSource) { 
+/**
+ * THE single focus indicator for the whole system. Every interactive component
+ * uses this exact ring so tabbing through a form/toolbar shows one consistent
+ * focus — a soft ring, no offset gap. `FIELD_FOCUS_RING` is the `focus-within`
+ * variant for field wrappers; `CONTROL_FOCUS_RING` is the `focus-visible`
+ * variant for buttons and other single-element controls.
+ */
+export const MODO_FOCUS_RING = 'ring-2 ring-ring/60';
+export const FIELD_FOCUS_RING = 'focus-within:ring-2 focus-within:ring-ring/60';
+export const CONTROL_FOCUS_RING =
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60';
+
+/**
+ * Resuelve las clases de wrapper (variante + halo + error) y el radius
+ * para cualquier campo de formulario que siga el patrón Input/Textarea.
+ */
+export function useFieldClasses(source: UseFieldClassesSource) {
     const resolvedHalo = useResolvedHalo(() => { 
         const local = source.halo ? toValue(source.halo) : undefined; 
         return local; 
     }); 
  
-    const wrapperVariantClasses = computed(() => { 
-        const variant = toValue(source.variant); 
-        const stateColor = toValue(source.stateColor); 
-        const hasError = toValue(source.hasError); 
-        const forceFocus = source.forceFocus ? toValue(source.forceFocus) : false; 
-        const halo = resolvedHalo.value; 
-        const errBorder = hasError ? 'border-destructive' : ''; 
-        // En modo `neutral` el focus también queda gris; en `tinted` toma color. 
-        const focusRing = halo === 'neutral' ? 'focus-within:ring-ring/12' : FOCUS_RING_BY_COLOR[stateColor]; 
-        const focusBorder = FOCUS_BORDER_BY_COLOR[stateColor]; 
-        const forcedRing = forceFocus 
-            ? (halo === 'neutral' ? 'ring-ring/12' : FORCED_RING_BY_COLOR[stateColor]) 
-            : ''; 
-        const forcedBorder = forceFocus ? FORCED_BORDER_BY_COLOR[stateColor] : ''; 
-        const forcedBg = forceFocus ? 'bg-background' : ''; 
- 
-        // Halo persistente (ring idle) — se omite cuando halo === 'off'. 
-        // En 'off' aparece solo en focus-within, neutro (no tintado al color). 
-        const idleRing = halo === 'off' ? '' : 'ring-4 ring-border/25'; 
-        const offFocusRingUtil = 'focus-within:ring-4 focus-within:ring-ring/15'; 
-        const focusRingUtil = halo === 'off' ? offFocusRingUtil : `focus-within:ring-4 ${focusRing}`; 
-        const offForcedRing = 'ring-4 ring-ring/15'; 
-        const forcedRingUtil = halo === 'off' 
-            ? (forceFocus ? offForcedRing : '') 
-            : (forceFocus ? `ring-4 ${forcedRing}` : ''); 
- 
-        switch (variant) { 
-            case 'filled': 
-                return [ 
-                    'bg-muted border border-transparent', 
-                    idleRing, 
-                    'focus-within:bg-background', 
-                    focusRingUtil, 
-                    forceFocus ? `${forcedRingUtil} ${forcedBg}` : forcedBg, 
-                    errBorder, 
-                ].join(' '); 
-            case 'ghost': 
-                return [ 
-                    'bg-transparent border-b border-border rounded-none', 
-                    focusBorder, 
-                    forcedBorder, 
-                    hasError ? 'border-destructive' : '', 
-                ].join(' '); 
-            case 'outline': 
-            default: 
-                return [ 
-                    'bg-background border border-input', 
-                    idleRing, 
-                    focusRingUtil, 
-                    forcedRingUtil, 
-                    errBorder, 
-                ].join(' '); 
-        } 
-    }); 
+    const wrapperVariantClasses = computed(() => {
+        const variant = toValue(source.variant);
+        const stateColor = toValue(source.stateColor);
+        const hasError = toValue(source.hasError);
+        const forceFocus = source.forceFocus ? toValue(source.forceFocus) : false;
+        const halo = resolvedHalo.value;
+        const errBorder = hasError ? 'border-destructive' : '';
+        const focusBorder = FOCUS_BORDER_BY_COLOR[stateColor];
+        const forcedBorder = forceFocus ? FORCED_BORDER_BY_COLOR[stateColor] : '';
+        const forcedBg = forceFocus ? 'bg-background' : '';
+
+        // The persistent halo (idle ring) is opt-in via `neutral`/`tinted`.
+        // The FOCUS ring is the SAME everywhere (see MODO_FOCUS_RING) so a field
+        // and a button show an identical indicator when you tab to them.
+        const idleRing = halo === 'off' ? '' : 'ring-4 ring-border/25';
+        const focusRingUtil = FIELD_FOCUS_RING;
+        const forcedRingUtil = forceFocus ? MODO_FOCUS_RING : '';
+
+        switch (variant) {
+            case 'filled':
+                return [
+                    'bg-muted border border-transparent',
+                    idleRing,
+                    'focus-within:bg-background',
+                    focusBorder,
+                    focusRingUtil,
+                    forceFocus ? `${forcedRingUtil} ${forcedBorder} ${forcedBg}` : forcedBg,
+                    errBorder,
+                ].join(' ');
+            case 'ghost':
+                return [
+                    'bg-transparent border-b border-border rounded-none',
+                    focusBorder,
+                    forcedBorder,
+                    hasError ? 'border-destructive' : '',
+                ].join(' ');
+            case 'outline':
+            default:
+                return [
+                    'bg-background border border-input',
+                    idleRing,
+                    focusBorder,
+                    focusRingUtil,
+                    forcedRingUtil,
+                    forcedBorder,
+                    errBorder,
+                ].join(' ');
+        }
+    });
  
     const radiusClasses = computed(() => { 
         const variant = toValue(source.variant); 
@@ -270,7 +261,11 @@ export function useFieldClasses(source: UseFieldClassesSource) {
             case 'none': return 'rounded-none'; 
             case 'small': return 'rounded-sm'; 
             case 'large': return 'rounded-xl'; 
-            case 'full': return source.fullRadiusClass ?? 'rounded-full'; 
+            // `rounded-full` compiles to an effectively-infinite radius which
+            // Chrome clamps differently for box-shadows than for the border,
+            // making any ring render boxy corners. A large *finite* radius is a
+            // visually-identical pill that shadows follow correctly.
+            case 'full': return source.fullRadiusClass ?? 'rounded-[999px]';
             case 'medium': 
             default: return 'rounded-md'; 
         } 

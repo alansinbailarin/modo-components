@@ -69,32 +69,32 @@ const radiusClasses = computed(() => {
     case "large":
       return "rounded-lg";
     case "full":
-      return "rounded-full";
+      return "rounded-[999px]";
     case "medium":
     default:
       return "rounded-md";
   }
 });
 
-// Halo alrededor del group (solo variante rellena "normal" o default).
+// The group no longer draws its own halo/ring: each child button already shows a
+// single consistent `focus-visible:ring-2` on keyboard focus, and idle/hover
+// rings were removed library-wide. `neutral`/`tinted` stay as an explicit opt-in
+// for a persistent tinted ring around the whole group.
 const haloClasses = computed(() => {
   const variant = props.variant ?? "normal";
   if (variant !== "normal") return "";
 
   const haloMode = resolvedHalo.value;
+  if (haloMode === "off") return "";
+
   const transition = "transition-[--tw-ring-color] duration-base ease-standard";
 
-  // 'off' (default): sin ring idle. Aparece solo en hover/focus-within, neutro.
-  if (haloMode === "off") {
-    return `hover:ring-[3px] hover:ring-foreground/12 focus-within:ring-[3px] focus-within:ring-foreground/20 ${transition}`;
-  }
-
-  // 'neutral': idle + hover/focus siempre gris.
+  // 'neutral': persistent grey ring.
   if (haloMode === "neutral") {
     return `ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-within:ring-foreground/25 ${transition}`;
   }
 
-  // 'tinted' (legacy): tintado al color.
+  // 'tinted' (legacy): persistent ring tinted to the color.
   const map: Record<string, string> = {
     default:
       "ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-within:ring-foreground/25",

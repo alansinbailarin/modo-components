@@ -461,16 +461,17 @@ const thumbBorderColorClass = computed(
 );
 
 const THUMB_HALO_BY_COLOR: Record<string, string> = {
+  // Idle/hover halo stays tinted per color; focus uses the unified ring.
   default:
-    "ring-[3px] ring-foreground/10 hover:ring-foreground/20 focus-visible:ring-foreground/30",
+    "ring-[3px] ring-foreground/10 hover:ring-foreground/20 focus-visible:ring-ring/60",
   primary:
-    "ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-primary/35",
+    "ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-ring/60",
   danger:
-    "ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-destructive/35",
+    "ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-ring/60",
   success:
-    "ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-success/35",
+    "ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-ring/60",
   warning:
-    "ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-warning/35",
+    "ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-ring/60",
 };
 const thumbHaloClass = computed(
   () =>

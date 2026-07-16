@@ -408,13 +408,8 @@ const activePresetClasses = computed(() => ({
     warning: 'bg-warning-subtle text-warning font-medium', 
 }[resolvedColor.value] ?? 'bg-primary-subtle text-primary font-medium')); 
  
-const focusRingColorClass = computed(() => ({ 
-    default: 'focus-visible:ring-ring', 
-    primary: 'focus-visible:ring-primary', 
-    danger: 'focus-visible:ring-destructive', 
-    success: 'focus-visible:ring-success', 
-    warning: 'focus-visible:ring-warning', 
-}[resolvedColor.value] ?? 'focus-visible:ring-primary')); 
+// Unified focus ring across the system — colour-agnostic.
+const focusRingColorClass = computed(() => 'focus-visible:ring-ring/60');
  
 const containerRadiusClass = computed(() => ({ 
     none: 'rounded-none', 

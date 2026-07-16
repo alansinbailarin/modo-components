@@ -67,6 +67,7 @@ import {
   useModoConfig,
   useSizeTokens,
 } from "../../composables/useModoConfig";
+import { CONTROL_FOCUS_RING } from "../../composables/useField";
 import Loader from "../feedback/Loader.vue";
 import Skeleton from "../feedback/Skeleton.vue";
 
@@ -150,7 +151,7 @@ const resolvedAriaLabel = computed(() => {
 });
 
 const baseClasses =
-  "focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors duration-300 ease-in-out inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed";
+  `${CONTROL_FOCUS_RING} transition-colors duration-300 ease-in-out inline-flex items-center justify-center gap-2 cursor-pointer disabled:cursor-not-allowed`;
 
 const variantClasses = computed(() => {
   switch (variant.value) {
@@ -166,56 +167,31 @@ const variantClasses = computed(() => {
 });
 
 const haloClasses = computed(() => {
-  // Halo persistente en 'normal' (relleno) y 'outline'.
-  // 'ghost' y 'text' no lo llevan: son invisibles en idle por diseño.
-  // Se suprime dentro de un ButtonGroup (se solaparía entre botones pegados).
+  // Persistent (idle) halo, opt-in via 'neutral'/'tinted'. The FOCUS ring is
+  // handled uniformly by `baseClasses` (CONTROL_FOCUS_RING), so these maps only
+  // describe the resting + hover ring — no per-component focus ring here.
+  // Suppressed inside a ButtonGroup (adjacent buttons would overlap rings).
   if (isInGroup.value) return "";
   if (variant.value !== "normal" && variant.value !== "outline") return "";
 
   const haloMode = halo.value;
 
-  // 'off' (default): sin ring idle. Aparece solo en hover/focus-visible, neutro.
-  if (haloMode === "off") {
-    return variant.value === "outline"
-      ? "hover:ring-[3px] hover:ring-foreground/8 focus-visible:ring-[3px] focus-visible:ring-foreground/15"
-      : "hover:ring-[3px] hover:ring-foreground/12 focus-visible:ring-[3px] focus-visible:ring-foreground/20";
-  }
+  // 'off' (default): no idle/hover halo. Focus still shows the unified ring.
+  if (haloMode === "off") return "";
 
-  // 'neutral': idle + hover/focus siempre gris (no toma color del componente).
+  // 'neutral': idle grey ring.
   if (haloMode === "neutral") {
-    return variant.value === "outline"
-      ? "ring-[3px] ring-foreground/6 hover:ring-foreground/10 focus-visible:ring-foreground/18"
-      : "ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25";
+    return "ring-[3px] ring-foreground/10 hover:ring-foreground/15";
   }
 
-  // 'tinted' (legacy): halo persistente tintado al color.
-  const filled: Record<string, string> = {
-    default:
-      "ring-[3px] ring-foreground/10 hover:ring-foreground/15 focus-visible:ring-foreground/25",
-    primary:
-      "ring-[3px] ring-primary/15 hover:ring-primary/25 focus-visible:ring-primary/35",
-    danger:
-      "ring-[3px] ring-destructive/15 hover:ring-destructive/25 focus-visible:ring-destructive/35",
-    success:
-      "ring-[3px] ring-success/15 hover:ring-success/25 focus-visible:ring-success/35",
-    warning:
-      "ring-[3px] ring-warning/15 hover:ring-warning/25 focus-visible:ring-warning/35",
+  // 'tinted' (legacy): idle ring tinted to the color.
+  const map: Record<string, string> = {
+    default: "ring-[3px] ring-foreground/10 hover:ring-foreground/15",
+    primary: "ring-[3px] ring-primary/15 hover:ring-primary/25",
+    danger: "ring-[3px] ring-destructive/15 hover:ring-destructive/25",
+    success: "ring-[3px] ring-success/15 hover:ring-success/25",
+    warning: "ring-[3px] ring-warning/15 hover:ring-warning/25",
   };
-  // Outline no tiene fondo lleno, el halo se ve más marcado que en filled
-  // para la misma opacidad — lo bajamos un escalón.
-  const outline: Record<string, string> = {
-    default:
-      "ring-[3px] ring-foreground/8 hover:ring-foreground/12 focus-visible:ring-foreground/20",
-    primary:
-      "ring-[3px] ring-primary/10 hover:ring-primary/18 focus-visible:ring-primary/28",
-    danger:
-      "ring-[3px] ring-destructive/10 hover:ring-destructive/18 focus-visible:ring-destructive/28",
-    success:
-      "ring-[3px] ring-success/10 hover:ring-success/18 focus-visible:ring-success/28",
-    warning:
-      "ring-[3px] ring-warning/10 hover:ring-warning/18 focus-visible:ring-warning/28",
-  };
-  const map = variant.value === "outline" ? outline : filled;
   return map[color.value] ?? map.default;
 });
 
@@ -227,50 +203,50 @@ const colorClasses = computed(() => {
         ? "text-background bg-gradient-to-r from-foreground via-foreground/90 to-foreground/90 hover:from-foreground/90 hover:via-foreground/80 hover:to-foreground/80 active:from-foreground/80 active:via-foreground/70 active:to-foreground/70 disabled:opacity-40"
         : "text-background bg-foreground hover:bg-foreground/90 active:bg-foreground/80 disabled:opacity-40",
       outline:
-        "border-border text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:border-border disabled:bg-muted/60",
+        "border-border text-foreground hover:bg-muted active:bg-muted-hover disabled:text-muted-foreground disabled:border-border disabled:bg-muted/60",
       ghost:
-        "text-foreground bg-muted hover:bg-muted-hover active:bg-accent-hover focus-visible:ring-ring disabled:text-muted-foreground disabled:bg-muted/60",
-      text: "text-foreground hover:bg-muted active:bg-muted-hover focus-visible:ring-ring disabled:text-muted-foreground",
+        "text-foreground bg-muted hover:bg-muted-hover active:bg-accent-hover disabled:text-muted-foreground disabled:bg-muted/60",
+      text: "text-foreground hover:bg-muted active:bg-muted-hover disabled:text-muted-foreground",
     },
     primary: {
       normal: isGradient
         ? "text-primary-foreground bg-gradient-to-r from-primary via-primary/90 to-primary/90 hover:from-primary-hover hover:via-primary-hover/90 hover:to-primary-hover/90 active:from-primary-active active:via-primary-active/90 active:to-primary-active/90 disabled:opacity-40"
         : "text-primary-foreground bg-primary hover:bg-primary-hover active:bg-primary-active disabled:opacity-40",
       outline:
-        "border-primary/40 text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50 disabled:border-primary/20 disabled:bg-primary/5",
+        "border-primary/40 text-primary hover:bg-primary-subtle active:bg-primary/20 disabled:text-primary/50 disabled:border-primary/20 disabled:bg-primary/5",
       ghost:
-        "text-primary bg-primary-subtle hover:bg-primary/20 active:bg-primary/25 focus-visible:ring-primary disabled:text-primary/50 disabled:bg-primary/5",
-      text: "text-primary hover:bg-primary-subtle active:bg-primary/20 focus-visible:ring-primary disabled:text-primary/50",
+        "text-primary bg-primary-subtle hover:bg-primary/20 active:bg-primary/25 disabled:text-primary/50 disabled:bg-primary/5",
+      text: "text-primary hover:bg-primary-subtle active:bg-primary/20 disabled:text-primary/50",
     },
     danger: {
       normal: isGradient
         ? "text-destructive-foreground bg-gradient-to-r from-destructive via-destructive/90 to-destructive/90 hover:from-destructive-hover hover:via-destructive-hover/90 hover:to-destructive-hover/90 active:from-destructive-active active:via-destructive-active/90 active:to-destructive-active/90 disabled:opacity-40"
         : "text-destructive-foreground bg-destructive hover:bg-destructive-hover active:bg-destructive-active disabled:opacity-40",
       outline:
-        "border-destructive/40 text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50 disabled:border-destructive/20 disabled:bg-destructive/5",
+        "border-destructive/40 text-destructive hover:bg-destructive-subtle active:bg-destructive/20 disabled:text-destructive/50 disabled:border-destructive/20 disabled:bg-destructive/5",
       ghost:
-        "text-destructive bg-destructive-subtle hover:bg-destructive/20 active:bg-destructive/25 focus-visible:ring-destructive disabled:text-destructive/50 disabled:bg-destructive/5",
-      text: "text-destructive hover:bg-destructive-subtle active:bg-destructive/20 focus-visible:ring-destructive disabled:text-destructive/50",
+        "text-destructive bg-destructive-subtle hover:bg-destructive/20 active:bg-destructive/25 disabled:text-destructive/50 disabled:bg-destructive/5",
+      text: "text-destructive hover:bg-destructive-subtle active:bg-destructive/20 disabled:text-destructive/50",
     },
     success: {
       normal: isGradient
         ? "text-success-foreground bg-gradient-to-r from-success via-success/90 to-success/90 hover:from-success-hover hover:via-success-hover/90 hover:to-success-hover/90 active:from-success-active active:via-success-active/90 active:to-success-active/90 disabled:opacity-40"
         : "text-success-foreground bg-success hover:bg-success-hover active:bg-success-active disabled:opacity-40",
       outline:
-        "border-success/40 text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50 disabled:border-success/20 disabled:bg-success/5",
+        "border-success/40 text-success hover:bg-success-subtle active:bg-success/20 disabled:text-success/50 disabled:border-success/20 disabled:bg-success/5",
       ghost:
-        "text-success bg-success-subtle hover:bg-success/20 active:bg-success/25 focus-visible:ring-success disabled:text-success/50 disabled:bg-success/5",
-      text: "text-success hover:bg-success-subtle active:bg-success/20 focus-visible:ring-success disabled:text-success/50",
+        "text-success bg-success-subtle hover:bg-success/20 active:bg-success/25 disabled:text-success/50 disabled:bg-success/5",
+      text: "text-success hover:bg-success-subtle active:bg-success/20 disabled:text-success/50",
     },
     warning: {
       normal: isGradient
         ? "text-warning-foreground bg-gradient-to-r from-warning via-warning/90 to-warning/90 hover:from-warning-hover hover:via-warning-hover/90 hover:to-warning-hover/90 active:from-warning-active active:via-warning-active/90 active:to-warning-active/90 disabled:opacity-40"
         : "text-warning-foreground bg-warning hover:bg-warning-hover active:bg-warning-active disabled:opacity-40",
       outline:
-        "border-warning/40 text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50 disabled:border-warning/20 disabled:bg-warning/5",
+        "border-warning/40 text-warning hover:bg-warning-subtle active:bg-warning/20 disabled:text-warning/50 disabled:border-warning/20 disabled:bg-warning/5",
       ghost:
-        "text-warning bg-warning-subtle hover:bg-warning/20 active:bg-warning/25 focus-visible:ring-warning disabled:text-warning/50 disabled:bg-warning/5",
-      text: "text-warning hover:bg-warning-subtle active:bg-warning/20 focus-visible:ring-warning disabled:text-warning/50",
+        "text-warning bg-warning-subtle hover:bg-warning/20 active:bg-warning/25 disabled:text-warning/50 disabled:bg-warning/5",
+      text: "text-warning hover:bg-warning-subtle active:bg-warning/20 disabled:text-warning/50",
     },
   };
   return map[color.value]?.[variant.value] ?? map.default.normal;
@@ -294,7 +270,7 @@ const radiusClasses = computed(() => {
     case "large":
       return "rounded-lg";
     case "full":
-      return "rounded-full";
+      return "rounded-[999px]";
     default:
       return "rounded-md";
   }

@@ -32,8 +32,8 @@
                     'modo-switch-track relative shrink-0 inline-flex items-center', 
                     trackRadiusClass, 
                     'border border-transparent transition-all duration-base ease-standard', 
-                    'ring-4 ring-border/25', 
-                    'peer-focus-visible:ring-4', 
+                    'ring-4 ring-border/25',
+                    'peer-focus-visible:ring-2',
                     trackSizeClasses, 
                     trackStateClasses, 
                     'mt-0.5', 
@@ -198,13 +198,14 @@ const CHECKED_BG_BY_COLOR: Record<string, string> = {
     warning: 'bg-warning', 
 }; 
  
-const FOCUS_RING_BY_COLOR: Record<string, string> = { 
-    default: 'peer-focus-visible:ring-ring/25', 
-    primary: 'peer-focus-visible:ring-primary/25', 
-    danger: 'peer-focus-visible:ring-destructive/25', 
-    success: 'peer-focus-visible:ring-success/25', 
-    warning: 'peer-focus-visible:ring-warning/25', 
-}; 
+// Unified focus ring (matches MODO_FOCUS_RING) — same across every control.
+const FOCUS_RING_BY_COLOR: Record<string, string> = {
+    default: 'peer-focus-visible:ring-ring/60',
+    primary: 'peer-focus-visible:ring-ring/60',
+    danger: 'peer-focus-visible:ring-ring/60',
+    success: 'peer-focus-visible:ring-ring/60',
+    warning: 'peer-focus-visible:ring-ring/60',
+};
  
 const HOVER_BG_BY_COLOR: Record<string, string> = { 
     default: 'group-hover:bg-muted', 

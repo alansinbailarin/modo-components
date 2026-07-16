@@ -6,6 +6,7 @@
         :aria-disabled="disabled || undefined"
         :class="[
             'relative inline-flex items-center p-1 bg-muted gap-0.5',
+            trackSizeClass,
             radiusClasses,
             fullWidth ? 'w-full' : '',
             disabled ? 'opacity-60 pointer-events-none' : '',
@@ -34,8 +35,7 @@
             :class="[
                 'relative z-10 inline-flex items-center justify-center gap-1.5 font-medium select-none whitespace-nowrap',
                 'transition-colors duration-150 ease-out',
-                'focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:ring-offset-muted',
-                focusRingClass,
+                'focus:outline-none focus-visible:ring-2 focus-visible:ring-ring/60',
                 sizeClasses,
                 innerRadiusClasses,
                 fullWidth ? 'flex-1' : '',
@@ -185,7 +185,12 @@ function moveFocus(current: SegmentedItem, dir: 1 | -1) {
 }
 
 // ── Class maps ────────────────────────────────────────────────────────────
-const sizeClasses = computed(() => `${sz.value.control} ${sz.value.padX} ${sz.value.text}`);
+// The OUTER track owns the control height; the segments fill the padded area
+// (`h-full`). This keeps a Segmented the exact same box height as a Button /
+// Input at the same size (previously it ran +8px taller because of the track
+// padding), so it lines up in a toolbar with no height override.
+const trackSizeClass = computed(() => sz.value.control);
+const sizeClasses = computed(() => `h-full ${sz.value.padX} ${sz.value.text}`);
 
 const iconSizeClasses = computed(() => sz.value.icon);
 
@@ -223,16 +228,6 @@ const activeTextClass = computed(() => {
     }
 });
 
-const focusRingClass = computed(() => {
-    switch (resolvedColor.value) {
-        case 'primary': return 'focus-visible:ring-primary';
-        case 'danger':  return 'focus-visible:ring-destructive';
-        case 'success': return 'focus-visible:ring-success';
-        case 'warning': return 'focus-visible:ring-warning';
-        case 'default':
-        default:        return 'focus-visible:ring-foreground/30';
-    }
-});
 </script>
 
 <style scoped>

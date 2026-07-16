@@ -371,16 +371,8 @@ const segmentedTrackRadius = computed(() => {
     } 
 }); 
  
-const focusRingClass = computed(() => { 
-    switch (resolvedColor.value) { 
-        case 'primary': return 'focus-visible:ring-primary'; 
-        case 'danger': return 'focus-visible:ring-destructive'; 
-        case 'success': return 'focus-visible:ring-success'; 
-        case 'warning': return 'focus-visible:ring-warning'; 
-        case 'default': 
-        default: return 'focus-visible:ring-ring'; 
-    } 
-}); 
+// Unified focus ring across the system — colour-agnostic.
+const focusRingClass = computed(() => 'focus-visible:ring-ring/60');
  
 // Active text/border color tokens by `color` prop. 
 function activeBrandText() { 

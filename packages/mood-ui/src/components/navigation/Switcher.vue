@@ -18,7 +18,7 @@
       :class="[
         'inline-flex items-center gap-3 px-3 py-2 text-left transition-colors',
         'border bg-card text-card-foreground border-border',
-        'hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+        'hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60',
         radiusClass,
         fullWidth ? 'w-full' : '',
         disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer',
@@ -94,7 +94,7 @@
             :placeholder="resolvedSearchPlaceholder"
             :aria-controls="listboxId"
             :aria-activedescendant="activeDescendantId"
-            class="w-full px-2 py-1.5 text-body bg-background border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            class="w-full px-2 py-1.5 text-body bg-background border border-border rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60"
             @keydown="onSearchKeydown"
           />
         </div>
@@ -131,7 +131,7 @@
           v-else
           role="listbox"
           :id="listboxId"
-          class="flex flex-col py-1"
+          class="flex flex-col"
           @keydown="onListKeydown"
         >
           <li
@@ -286,7 +286,7 @@ const radiusClass = computed(() => {
     case "none": return "rounded-none";
     case "small": return "rounded-sm";
     case "large": return "rounded-lg";
-    case "full": return "rounded-full";
+    case "full": return "rounded-[999px]";
     default: return "rounded-md";
   }
 });
