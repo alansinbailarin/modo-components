@@ -58,7 +58,7 @@ export function usePageSeo(routePath: string): PageSeoResult {
   const related = seo.related.map((r) => ({ label: labelFor(r), route: r }));
   const cat = categoryOf(seo.route);
   const breadcrumbs = [
-    { label: t("common.home"), route: "/" },
+    { label: t("home"), route: "/" },
     ...(cat ? [{ label: cat.title, route: cat.entries[0]?.route ?? seo.route }] : []),
     { label: labelFor(seo.route), route: seo.route },
   ];
