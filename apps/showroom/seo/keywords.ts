@@ -17,6 +17,20 @@ export interface ComponentSeo {
 }
 
 export const COMPONENT_SEO: Record<string, ComponentSeo> = {
+  "/data-display/chart": {
+    route: "/data-display/chart",
+    i18nKey: "pages.dataDisplay.chart",
+    schemaType: "SoftwareSourceCode",
+    keywords: ["Vue Chart component", "Vue charts", "Vue SVG charts", "Recharts alternative Vue"],
+    related: ["/data-display/stat", "/data-display/card", "/data-display/table"],
+  },
+  "/forms/menu-button": {
+    route: "/forms/menu-button",
+    i18nKey: "pages.forms.menuButton",
+    schemaType: "SoftwareSourceCode",
+    keywords: ["Vue MenuButton", "Vue dropdown button", "Vue split button", "Vue menu button"],
+    related: ["/forms/button", "/forms/button-group", "/forms/segmented"],
+  },
   "/data-display/table": {
     route: "/data-display/table",
     i18nKey: "pages.dataDisplay.table",
