@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject, onMounted, watch } from "vue";
-import { Banner, Card, Stack, Typography } from "mood-ui";
+import { Banner, Button, Card, Stack, Typography } from "mood-ui";
 import { useI18n } from "vue-i18n";
 import {
   DocumentTextIcon,
@@ -68,24 +68,28 @@ curl https://mood-ui.com/llms-full.txt`;
         {{ t("pages.docs.llms.subtitle") }}
       </Typography>
       <div class="flex flex-wrap gap-2 pt-1">
-        <a
+        <Button
+          as="a"
           href="/llms.txt"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/40 hover:border-primary/40 transition-colors"
+          variant="outline"
+          size="small"
+          :icon="DocumentTextIcon"
         >
-          <DocumentTextIcon class="size-4 text-primary" />
           {{ t("pages.docs.llms.openShort") }}
-        </a>
-        <a
+        </Button>
+        <Button
+          as="a"
           href="/llms-full.txt"
           target="_blank"
           rel="noopener"
-          class="inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-sm font-medium hover:bg-muted/40 hover:border-primary/40 transition-colors"
+          variant="outline"
+          size="small"
+          :icon="BookOpenIcon"
         >
-          <BookOpenIcon class="size-4 text-success" />
           {{ t("pages.docs.llms.openFull") }}
-        </a>
+        </Button>
       </div>
     </header>
 
