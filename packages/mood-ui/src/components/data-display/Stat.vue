@@ -1,14 +1,14 @@
 <template>
-    <div
-        :class="[
-            'relative flex flex-col',
-            cardClasses,
-            paddingClasses,
-        ]"
+    <!-- Card variants delegate to the shared <Card> so the surface/shadow/radius
+         stay identical everywhere (no bespoke shadow on `outlined`). `plain`
+         renders no container. -->
+    <component
+        :is="isCard ? Card : 'div'"
+        v-bind="wrapperAttrs"
     >
-        <!-- Header: label + icon -->
-        <div class="flex items-start justify-between gap-3">
-            <span :class="['font-medium text-muted-foreground leading-none', labelSizeClass]">{{ label }}</span>
+        <div :class="['relative flex flex-col', gapClass, paddingClasses]">
+        <!-- Header: icon + label, left-aligned. Only when there's something to show. -->
+        <div v-if="icon || label" class="flex items-center gap-2.5">
             <span
                 v-if="icon"
                 :class="[
@@ -19,18 +19,25 @@
             >
                 <component :is="icon" :class="iconSizeClass" aria-hidden="true" />
             </span>
+            <span v-if="label" :class="['font-normal text-muted-foreground leading-none', labelSizeClass]">{{ label }}</span>
         </div>
 
-        <!-- Value -->
-        <div :class="['mt-3', icon ? '' : '']">
-            <div v-if="loading" :class="['bg-muted animate-pulse rounded-lg', skeletonClass]" />
-            <span v-else :class="['font-semibold text-foreground tabular-nums leading-none', valueSizeClass]">
-                {{ value }}
-            </span>
+        <!-- Value (left) + optional chart (right). With no `value`, the chart
+             fills the card — a "chart-only" stat. -->
+        <div v-if="loading || value !== undefined || $slots.chart" class="flex items-center gap-4">
+            <div v-if="loading || value !== undefined" class="shrink-0">
+                <div v-if="loading" :class="['bg-muted animate-pulse rounded-lg', skeletonClass]" />
+                <span v-else :class="['font-semibold text-foreground tabular-nums leading-none', valueSizeClass]">
+                    {{ value }}
+                </span>
+            </div>
+            <div v-if="$slots.chart" class="flex-1 min-w-0">
+                <slot name="chart" />
+            </div>
         </div>
 
         <!-- Trend + description -->
-        <div v-if="trend || description" :class="['flex items-center gap-2 flex-wrap', trendGapClass]">
+        <div v-if="trend || description" class="flex items-center gap-2 flex-wrap">
             <span
                 v-if="trend"
                 :class="[
@@ -46,14 +53,16 @@
             </span>
             <span v-if="description" :class="['text-muted-foreground', descSizeClass]">{{ description }}</span>
         </div>
-    </div>
+        </div>
+    </component>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
 import { ArrowUpIcon, ArrowDownIcon, MinusIcon } from '@heroicons/vue/20/solid';
 import type { Stat } from '../../interfaces/data-display/Stat.interface';
-import { useResolvedColor, useResolvedSize, useResolvedRadius } from '../../composables/useModoConfig';
+import { useResolvedColor, useResolvedSize } from '../../composables/useModoConfig';
+import Card from './Card.vue';
 
 const props = withDefaults(defineProps<Stat>(), {
     variant: 'plain',
@@ -63,7 +72,14 @@ const props = withDefaults(defineProps<Stat>(), {
 
 const resolvedSize = useResolvedSize(() => props.size);
 const resolvedColor = useResolvedColor(() => props.color);
-const resolvedRadius = useResolvedRadius(() => (props as any).radius);
+
+// Card variants render through the shared <Card>; `plain` renders a bare div.
+const isCard = computed(() => props.variant !== 'plain');
+const wrapperAttrs = computed(() =>
+    isCard.value
+        ? { variant: props.variant, radius: props.radius, padding: 'none' as const }
+        : {},
+);
 
 const trendDirection = computed<'up' | 'down' | 'neutral'>(() => {
     if (!props.trend) return 'neutral';
@@ -80,26 +96,6 @@ const trendLabel = computed(() => {
     return `${sign}${props.trend.value}%`;
 });
 
-const radiusClass = computed(() => {
-    switch (resolvedRadius.value) {
-        case 'none':   return 'rounded-none';
-        case 'small':  return 'rounded-sm';
-        case 'large':  return 'rounded-xl';
-        case 'full':   return 'rounded-3xl';
-        case 'medium':
-        default:       return 'rounded-lg';
-    }
-});
-
-const cardClasses = computed(() => {
-    switch (props.variant) {
-        case 'outlined': return `border border-border bg-card ${radiusClass.value} shadow-sm`;
-        case 'filled':   return `bg-muted/50 border border-border/60 ${radiusClass.value}`;
-        case 'plain':
-        default:         return '';
-    }
-});
-
 const paddingClasses = computed(() => {
     if (props.variant === 'plain') return '';
     switch (resolvedSize.value) {
@@ -111,11 +107,12 @@ const paddingClasses = computed(() => {
 });
 
 const labelSizeClass = computed(() => {
+    // Normal case, no letter-spacing — reads like a plain label, not a caps eyebrow.
     switch (resolvedSize.value) {
-        case 'small':  return 'text-[11px] tracking-wide uppercase';
-        case 'large':  return 'text-sm tracking-wide uppercase';
+        case 'small':  return 'text-xs';
+        case 'large':  return 'text-base';
         case 'medium':
-        default:       return 'text-xs tracking-wide uppercase';
+        default:       return 'text-sm';
     }
 });
 
@@ -128,11 +125,13 @@ const valueSizeClass = computed(() => {
     }
 });
 
-const trendGapClass = computed(() => {
+// Vertical rhythm between header / value+chart / trend (gap, so a missing row
+// never leaves a dangling margin).
+const gapClass = computed(() => {
     switch (resolvedSize.value) {
-        case 'small':  return 'mt-2.5';
-        case 'large':  return 'mt-4';
-        default:       return 'mt-3';
+        case 'small':  return 'gap-2.5';
+        case 'large':  return 'gap-4';
+        default:       return 'gap-3';
     }
 });
 
@@ -168,18 +167,19 @@ const trendIconClass = computed(() => {
 });
 
 const iconBoxClass = computed(() => {
+    // Kept modest so the icon never competes with the value, even at `large`.
     switch (resolvedSize.value) {
         case 'small':  return 'w-7 h-7 rounded-lg';
-        case 'large':  return 'w-12 h-12 rounded-xl';
+        case 'large':  return 'w-10 h-10 rounded-xl';
         case 'medium':
-        default:       return 'w-9 h-9 rounded-xl';
+        default:       return 'w-8 h-8 rounded-lg';
     }
 });
 
 const iconSizeClass = computed(() => {
     switch (resolvedSize.value) {
         case 'small':  return 'w-3.5 h-3.5';
-        case 'large':  return 'w-6 h-6';
+        case 'large':  return 'w-5 h-5';
         case 'medium':
         default:       return 'w-4 h-4';
     }
