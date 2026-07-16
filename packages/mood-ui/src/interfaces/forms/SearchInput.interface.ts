@@ -1,8 +1,46 @@
+import type { Component } from 'vue';
 import type { ModoSize } from '../../config/ModoConfig';
 
-export interface SearchInput { 
-    /** v-model */ 
-    modelValue?: string | null; 
+/** One row in the SearchInput results dropdown. */
+export interface SearchResultItem {
+    /** Stable id; defaults to the index when omitted. */
+    id?: string | number;
+    /** Primary text. */
+    label: string;
+    /** Optional secondary text shown muted under the label. */
+    description?: string;
+    /** Leading icon (Vue component). Decorative. */
+    icon?: Component;
+    /** Optional group header this item belongs to. Consecutive items sharing a
+     *  group render one header above the first of the run (e.g. "Clients", "Go to"). */
+    group?: string;
+    /** Optional right-aligned hint (e.g. '⌘D'). Purely visual. */
+    shortcut?: string;
+    /** Render the row as an `<a>` link instead of a button. */
+    href?: string;
+    /** Open `href` in a new tab. */
+    external?: boolean;
+    /** Dim + disable the row. */
+    disabled?: boolean;
+}
+
+export interface SearchInput {
+    /** v-model */
+    modelValue?: string | null;
+
+    /**
+     * Results to show in a dropdown under the input. When provided (even an
+     * empty array) — or when the `#results` slot is used — the field renders a
+     * popover with the results. Filtering/async is up to the host; feed it via
+     * the `search` event (optionally debounced) and update `items`.
+     */
+    items?: SearchResultItem[];
+    /** Controls the results popover (optional `v-model:open`). */
+    open?: boolean;
+    /** Empty-state text shown when `items` is `[]`. */
+    emptyText?: string;
+    /** Results popover placement. @default 'bottom-start' */
+    resultsPlacement?: 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
  
     /** Etiqueta visible. */ 
     label?: string; 

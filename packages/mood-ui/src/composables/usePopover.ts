@@ -13,10 +13,17 @@ export interface UsePopoverOptions {
     flip?: boolean; 
     /** Hacer que el panel tenga el mismo ancho del trigger. @default false */ 
     matchTriggerWidth?: MaybeRefOrGetter<boolean>; 
-    /** Cerrar al hacer click fuera del trigger y del panel. @default true */ 
-    closeOnClickOutside?: boolean; 
-    /** Cerrar con Escape. @default true */ 
-    closeOnEscape?: boolean; 
+    /** Cerrar al hacer click fuera del trigger y del panel. @default true */
+    closeOnClickOutside?: boolean;
+    /** Cerrar con Escape. @default true */
+    closeOnEscape?: boolean;
+    /**
+     * Cerrar cuando la página hace scroll (fuera del panel). @default true
+     * Con `false` el popover se reposiciona en vez de cerrarse — útil para un
+     * dropdown de búsqueda que no debe desaparecer si enfocar el input provoca
+     * un pequeño auto-scroll.
+     */
+    closeOnScroll?: boolean;
     /** Callback cuando se abre. */ 
     onOpen?: () => void; 
     /** Callback cuando se cierra. */ 
@@ -49,11 +56,12 @@ export function usePopover(options: UsePopoverOptions = {}) {
         offset = 6, 
         flip = true, 
         matchTriggerWidth: matchTriggerWidthOption = false, 
-        closeOnClickOutside = true, 
-        closeOnEscape = true, 
-        onOpen, 
-        onClose, 
-    } = options; 
+        closeOnClickOutside = true,
+        closeOnEscape = true,
+        closeOnScroll = true,
+        onOpen,
+        onClose,
+    } = options;
  
     const triggerRef = ref<HTMLElement | null>(null); 
     const panelRef = ref<HTMLElement | null>(null); 
@@ -204,20 +212,22 @@ export function usePopover(options: UsePopoverOptions = {}) {
      * de opciones) → no hace nada. Scroll en window/body → cerrar. 
      * Se usa el evento "scroll" con capture para recibir cualquier scroll. 
      */ 
-    function onWindowScroll(e: Event) { 
-        if (!isOpen.value) return; 
-        const target = e.target as Node | null; 
-        if (target && panelRef.value && panelRef.value.contains(target)) { 
-            // Scroll interno del panel — ignorar. 
-            return; 
-        } 
-        // Scroll inside a nested popover (Select's option list teleported 
-        // to <body>) should not close us either. 
-        if (target instanceof Element && target.closest('.modo-popover')) { 
-            return; 
-        } 
-        close(); 
-    } 
+    function onWindowScroll(e: Event) {
+        if (!isOpen.value) return;
+        const target = e.target as Node | null;
+        if (target && panelRef.value && panelRef.value.contains(target)) {
+            // Scroll interno del panel — ignorar.
+            return;
+        }
+        // Scroll inside a nested popover (Select's option list teleported
+        // to <body>) should not close us either.
+        if (target instanceof Element && target.closest('.modo-popover')) {
+            return;
+        }
+        // Reposition instead of closing when the caller opted out of scroll-close.
+        if (!closeOnScroll) { measure(); return; }
+        close();
+    }
  
     let resizeObserver: ResizeObserver | null = null; 
  
