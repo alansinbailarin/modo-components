@@ -2663,6 +2663,12 @@
             "title": "Rich menu",
             "desc": "Headers, dividers, shortcuts, descriptions and destructive (danger) items."
           }
+        },
+        "seo": {
+          "metaTitle": "Vue MenuButton — Dropdown & Split Button",
+          "metaDescription": "Free, open-source Vue MenuButton: a button that opens a menu of actions, with dropdown and split-button variants, keyboard navigation and full accessibility. For Vue 3 and Nuxt.",
+          "h1": "Vue MenuButton Component",
+          "intro": "mood-ui's MenuButton is a free, open-source dropdown and split button for Vue 3 and Nuxt — trigger a menu of actions from a single button, with keyboard navigation, icons and accessibility built in."
         }
       }
     }

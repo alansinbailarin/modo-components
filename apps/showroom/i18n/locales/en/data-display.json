@@ -2338,6 +2338,12 @@
         "types": {
           "title": "Types & data shapes",
           "desc": "The full set of chart types and the polymorphic data each one accepts."
+        },
+        "seo": {
+          "metaTitle": "Vue Chart Component — SVG Charts for Vue 3",
+          "metaDescription": "Free, open-source Vue chart component: line, area, bar, donut, pie, gauge, radar, heatmap and sparkline — pure SVG, zero dependencies. A lightweight Recharts alternative for Vue 3 and Nuxt.",
+          "h1": "Vue Chart Component",
+          "intro": "mood-ui's Chart is a free, open-source charting component for Vue 3 and Nuxt — line, area, bar, scatter, donut, pie, gauge, radial, radar, heatmap and sparkline, all rendered as pure SVG with zero chart dependencies. A lightweight alternative to Recharts and Chart.js."
         }
       }
     }

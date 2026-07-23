@@ -2338,6 +2338,12 @@
         "types": {
           "title": "Tipos y formas de datos",
           "desc": "El conjunto completo de tipos de gráfica y los datos polimórficos que acepta cada uno."
+        },
+        "seo": {
+          "metaTitle": "Componente Vue Chart — Gráficas SVG para Vue 3",
+          "metaDescription": "Componente de gráficas Vue libre y open-source: línea, área, barras, dona, pastel, gauge, radar, heatmap y sparkline — SVG puro, cero dependencias. Una alternativa ligera a Recharts para Vue 3 y Nuxt.",
+          "h1": "Componente Vue Chart",
+          "intro": "El Chart de mood-ui es un componente de gráficas libre y open-source para Vue 3 y Nuxt: línea, área, barras, dispersión, dona, pastel, gauge, radial, radar, heatmap y sparkline, todo renderizado como SVG puro y sin dependencias de gráficas. Una alternativa ligera a Recharts y Chart.js."
         }
       }
     }

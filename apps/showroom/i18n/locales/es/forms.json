@@ -2663,6 +2663,12 @@
             "title": "Menú enriquecido",
             "desc": "Encabezados, divisores, atajos, descripciones e items destructivos (danger)."
           }
+        },
+        "seo": {
+          "metaTitle": "Componente Vue MenuButton — Botón Desplegable y Split",
+          "metaDescription": "Vue MenuButton libre y open-source: un botón que abre un menú de acciones, con variantes desplegable y split button, navegación por teclado y accesibilidad completa. Para Vue 3 y Nuxt.",
+          "h1": "Componente Vue MenuButton",
+          "intro": "El MenuButton de mood-ui es un botón desplegable y split libre y open-source para Vue 3 y Nuxt: abre un menú de acciones desde un solo botón, con navegación por teclado, iconos y accesibilidad integrada."
         }
       }
     }
