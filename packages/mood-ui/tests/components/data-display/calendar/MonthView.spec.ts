@@ -1,4 +1,4 @@
-import { describe, it, expect, afterEach } from "vitest";
+import { describe, it, expect, afterEach, beforeEach, vi } from "vitest";
 import { mount, type VueWrapper } from "@vue/test-utils";
 import MonthView from "../../../../src/components/data-display/calendar/MonthView.vue";
 import {
@@ -86,5 +86,47 @@ describe("MonthView — maxHeight", () => {
   it("leaves the height alone when unset", () => {
     const wrapper = mountMonth();
     expect(wrapper.element.getAttribute("style") ?? "").not.toContain("max-height");
+  });
+});
+
+describe("MonthView — the event tooltip keeps its surface", () => {
+  /** Hovering an event chip opens the tooltip after useEventHover's delay. */
+  async function hoverEvent(wrapper: VueWrapper) {
+    await chip(wrapper).trigger("mouseenter", { clientX: 40, clientY: 60 });
+    vi.advanceTimersByTime(400);
+    await wrapper.vm.$nextTick();
+  }
+
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  it("renders the built-in card when no slot is provided", async () => {
+    const wrapper = mountMonth();
+    await hoverEvent(wrapper);
+
+    const tooltip = document.querySelector<HTMLElement>("body > div.fixed");
+    expect(tooltip).not.toBeNull();
+    expect(tooltip!.innerHTML).toContain("bg-foreground");
+    expect(tooltip!.textContent).toContain("Training");
+  });
+
+  it("wraps a custom slot in a surface instead of leaving it bare", async () => {
+    const wrapper = mount(MonthView, {
+      props: { events: EVENTS, modelValue: new Date(2026, 7, 12) },
+      slots: {
+        "event-tooltip": '<span class="my-content">{{ params.event.title }}</span>',
+      },
+    });
+    mounted.push(wrapper as VueWrapper);
+    await hoverEvent(wrapper);
+
+    const custom = document.querySelector(".my-content");
+    expect(custom).not.toBeNull();
+    // Without the wrapper the content sat directly on the positioned box, with
+    // no background, radius, shadow or padding — text floating over the grid.
+    const surface = custom!.parentElement!;
+    expect(surface.className).toContain("bg-popover");
+    expect(surface.className).toContain("shadow-lg");
+    expect(surface.className).toContain("px-3");
   });
 });

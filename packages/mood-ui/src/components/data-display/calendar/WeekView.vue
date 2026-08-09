@@ -283,9 +283,15 @@
         </button> 
  
         <CalendarEventTooltip :state="hoverState" :style="tooltipStyle" :formatTime="formatEventTime"> 
-            <template #default="{ event, allDay }"> 
-                <slot name="event-tooltip" :event="event" :allDay="allDay" /> 
-            </template> 
+            <!--
+                A provided slot replaces the built-in card, so it gets the surface
+                here; with no slot the fallback content keeps rendering its own.
+            -->
+            <template v-if="$slots['event-tooltip']" #default="{ event, allDay }">
+                <div :class="CALENDAR_TOOLTIP_SURFACE">
+                    <slot name="event-tooltip" :event="event" :allDay="allDay" />
+                </div>
+            </template>
         </CalendarEventTooltip> 
     </div> 
 </template> 
@@ -306,6 +312,8 @@ import type { WeekView, BusinessHours } from '../../../interfaces/data-display/c
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
 import { toCssLength } from '../../../utils/cssLength';
+
+import { CALENDAR_TOOLTIP_SURFACE } from '../../../utils/calendarTooltip';
 
 const props = withDefaults(defineProps<WeekView>(), { 
     modelValue: () => new Date(), 

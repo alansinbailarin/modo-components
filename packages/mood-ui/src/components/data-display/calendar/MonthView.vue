@@ -168,9 +168,15 @@
         </div> 
  
         <CalendarEventTooltip :state="hoverState" :style="tooltipStyle" :formatTime="formatEventTime"> 
-            <template #default="{ event, allDay }"> 
-                <slot name="event-tooltip" :event="event" :allDay="allDay" /> 
-            </template> 
+            <!--
+                A provided slot replaces the built-in card, so it gets the surface
+                here; with no slot the fallback content keeps rendering its own.
+            -->
+            <template v-if="$slots['event-tooltip']" #default="{ event, allDay }">
+                <div :class="CALENDAR_TOOLTIP_SURFACE">
+                    <slot name="event-tooltip" :event="event" :allDay="allDay" />
+                </div>
+            </template>
         </CalendarEventTooltip> 
     </div> 
 </template> 
@@ -188,6 +194,8 @@ import CalendarHeader from './CalendarHeader.vue';
 import type { MonthView, CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
 import { toCssLength } from '../../../utils/cssLength';
+
+import { CALENDAR_TOOLTIP_SURFACE } from '../../../utils/calendarTooltip';
 
 const props = withDefaults(defineProps<MonthView>(), { 
     modelValue: () => new Date(), 
