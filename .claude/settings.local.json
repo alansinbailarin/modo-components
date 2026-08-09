@@ -5,7 +5,9 @@
       "Bash(npx vue-tsc *)",
       "Bash(BUILD_TARGET=lib npx vue-tsc -p tsconfig.lib.json --noEmit)",
       "Bash(awk '{print $NF}')",
-      "WebSearch"
+      "WebSearch",
+      "Bash(pnpm dev *)",
+      "Bash(curl -s http://localhost:3000/dev-sizes)"
     ]
   }
 }
