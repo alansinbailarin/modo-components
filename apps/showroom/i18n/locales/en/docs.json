@@ -163,6 +163,12 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.12.1": {
+            "title": "Custom calendar tooltips keep their surface",
+            "items": [
+              "Fixed: a custom #event-tooltip in any calendar view now renders on a proper tooltip surface. The card used to live inside the slot's fallback content, so providing the slot replaced the background, radius, shadow and padding along with the text and left the content floating over the grid."
+            ]
+          },
           "v0.12.0": {
             "title": "Mobile fixes & scrollable calendars",
             "items": [

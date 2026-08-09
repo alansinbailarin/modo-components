@@ -163,6 +163,12 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.12.1": {
+            "title": "Los tooltips personalizados del calendario conservan su superficie",
+            "items": [
+              "Corregido: un #event-tooltip propio en cualquier vista de calendario ahora se renderiza sobre una superficie de tooltip real. La tarjeta vivía dentro del contenido por defecto del slot, así que pasar el slot reemplazaba el fondo, el radius, la sombra y el padding junto con el texto, y el contenido quedaba flotando sobre la grilla."
+            ]
+          },
           "v0.12.0": {
             "title": "Correcciones en mobile y calendarios con scroll",
             "items": [

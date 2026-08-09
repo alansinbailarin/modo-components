@@ -93,6 +93,7 @@ interface Release {
 }
 
 const releases: Release[] = [
+  { version: "v0.12.1", date: "2026-08-08", tag: "patch" },
   { version: "v0.12.0", date: "2026-08-08", tag: "minor" },
   { version: "v0.11.0", date: "2026-07-16", tag: "minor" },
   { version: "v0.10.0", date: "2026-06-28", tag: "minor" },
