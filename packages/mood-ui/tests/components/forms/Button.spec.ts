@@ -9,27 +9,33 @@ const IconStub = defineComponent({
   },
 });
 
+/**
+ * Sizing comes from the shared size tokens: every control is anchored to the
+ * same height (`h-10` at medium), a text button adds horizontal padding
+ * (`padX`) and an icon-only button is squared off with `aspect-square` instead.
+ * The distinction that matters is that a button carrying text — from the
+ * `label` prop or the default slot — must never be squared like an icon-only.
+ */
 describe("Button sizeClasses — icon+text vs icon-only", () => {
-  it("applies text-button x-padding when icon and slot text are both present", () => {
+  it("applies text-button padding when icon and slot text are both present", () => {
     const wrapper = mount(Button, {
       props: { icon: IconStub },
       slots: { default: "Continue" },
     });
-    // medium text-button: px-5 py-1.5 — NOT p-2 (icon-only)
     const button = wrapper.find("button");
-    expect(button.classes()).toContain("px-5");
-    expect(button.classes()).toContain("py-1.5");
-    expect(button.classes()).not.toContain("p-2");
+    expect(button.classes()).toContain("h-10");
+    expect(button.classes()).toContain("px-3.5");
+    expect(button.classes()).not.toContain("aspect-square");
   });
 
-  it("applies icon-only padding when icon is present but no label and no slot", () => {
+  it("squares the button when an icon is present but there is no label and no slot", () => {
     const wrapper = mount(Button, {
       props: { icon: IconStub, ariaLabel: "Submit" },
     });
-    // medium icon-only: p-2
     const button = wrapper.find("button");
-    expect(button.classes()).toContain("p-2");
-    expect(button.classes()).not.toContain("px-5");
+    expect(button.classes()).toContain("h-10");
+    expect(button.classes()).toContain("aspect-square");
+    expect(button.classes()).not.toContain("px-3.5");
   });
 
   it("applies text-button padding when label prop and icon are both present", () => {
@@ -37,7 +43,14 @@ describe("Button sizeClasses — icon+text vs icon-only", () => {
       props: { label: "Continue", icon: IconStub },
     });
     const button = wrapper.find("button");
-    expect(button.classes()).toContain("px-5");
-    expect(button.classes()).not.toContain("p-2");
+    expect(button.classes()).toContain("px-3.5");
+    expect(button.classes()).not.toContain("aspect-square");
+  });
+
+  it("keeps the control height across sizes", () => {
+    const small = mount(Button, { props: { label: "Go", size: "small" } });
+    const large = mount(Button, { props: { label: "Go", size: "large" } });
+    expect(small.find("button").classes()).toContain("h-9");
+    expect(large.find("button").classes()).toContain("h-12");
   });
 });
