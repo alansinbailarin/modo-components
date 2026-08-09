@@ -141,7 +141,8 @@ import {
     useResolvedTheme, 
     useModoConfig, 
 } from '../../composables/useModoConfig'; 
-import { resolveColorMode } from '../../composables/useColorMode'; 
+import { resolveColorMode } from '../../composables/useColorMode';
+import { lockBodyScroll, unlockBodyScroll } from '../../composables/useBodyScrollLock';
 import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
 import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
 import { surfacesToCssVars } from '../../config/surfaces';
@@ -314,9 +315,10 @@ function onOverlayLeave(el: Element, done: () => void) {
         overlay.querySelector<HTMLElement>('[data-modo-drawer-panel]') 
         ?? panelRef.value; 
     const content = 
-        overlay.querySelector<HTMLElement>('[data-modo-drawer-content]') 
-        ?? contentRef.value; 
-    if (!overlay || !panel || !content) { done(); return; } 
+        overlay.querySelector<HTMLElement>('[data-modo-drawer-content]')
+        ?? contentRef.value;
+    // Bail out without animating, but never without releasing the lock.
+    if (!overlay || !panel || !content) { releaseScrollLock(); done(); return; }
  
     activeTimeline?.kill(); 
  
@@ -348,19 +350,16 @@ function onOverlayLeave(el: Element, done: () => void) {
     tl.to(overlay, { opacity: 0, duration: 0.28, ease: 'power2.in' }, 0.12); 
 } 
  
-/* ---------- Scroll lock + focus management ---------- */ 
-let previousOverflow = ''; 
-let previousPaddingRight = ''; 
-let previouslyFocused: HTMLElement | null = null; 
-let scrollLocked = false; 
- 
-function releaseScrollLock() { 
-    if (!scrollLocked) return; 
-    document.body.style.overflow = previousOverflow; 
-    document.body.style.paddingRight = previousPaddingRight; 
-    scrollLocked = false; 
-} 
- 
+/* ---------- Scroll lock + focus management ---------- */
+let previouslyFocused: HTMLElement | null = null;
+let scrollLocked = false;
+
+function releaseScrollLock() {
+    if (!scrollLocked) return;
+    scrollLocked = false;
+    unlockBodyScroll();
+}
+
 watch( 
     () => props.modelValue, 
     (open) => { 
@@ -368,16 +367,10 @@ watch(
             const active = document.activeElement as HTMLElement | null; 
             previouslyFocused = active; 
  
-            if (props.lockScroll && !scrollLocked) { 
-                const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth; 
-                previousOverflow = document.body.style.overflow; 
-                previousPaddingRight = document.body.style.paddingRight; 
-                document.body.style.overflow = 'hidden'; 
-                if (scrollBarWidth > 0) { 
-                    document.body.style.paddingRight = `${scrollBarWidth}px`; 
-                } 
-                scrollLocked = true; 
-            } 
+            if (props.lockScroll && !scrollLocked) {
+                scrollLocked = true;
+                lockBodyScroll();
+            }
             emit('open'); 
             nextTick(() => { 
                 if (!panelRef.value) return; 

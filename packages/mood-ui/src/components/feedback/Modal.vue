@@ -140,9 +140,10 @@ import {
     useResolvedTheme, 
     useModoConfig, 
 } from '../../composables/useModoConfig'; 
-import { resolveColorMode } from '../../composables/useColorMode'; 
-import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes'; 
-import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives'; 
+import { resolveColorMode } from '../../composables/useColorMode';
+import { lockBodyScroll, unlockBodyScroll } from '../../composables/useBodyScrollLock';
+import { palettesToCssVars, semanticTokensFromPalettes } from '../../config/palettes';
+import { hexToOklchString, pickForegroundOklch } from '../../config/colorPrimitives';
 import { surfacesToCssVars } from '../../config/surfaces'; 
 import type { ModoColor, ModoRadius } from '../../config/ModoConfig'; 
  
@@ -330,22 +331,24 @@ function onOverlayLeave(el: Element, done: () => void) {
     const panel = 
         overlay.querySelector<HTMLElement>('[data-modo-modal-panel]') 
         ?? panelRef.value; 
-    const content = 
-        overlay.querySelector<HTMLElement>('[data-modo-modal-content]') 
-        ?? contentRef.value; 
-    if (!overlay || !panel || !content) { done(); return; } 
- 
-    activeTimeline?.kill(); 
- 
-    if (prefersReducedMotion()) { 
-        gsap.to(overlay, { 
-            opacity: 0, 
-            duration: 0.12, 
-            onComplete: () => { releaseScrollLock(); done(); }, 
-        }); 
-        return; 
-    } 
- 
+    const content =
+        overlay.querySelector<HTMLElement>('[data-modo-modal-content]')
+        ?? contentRef.value;
+    // Bail out without animating, but never without releasing the lock — this
+    // path is the one that used to strand `overflow: hidden` on <body>.
+    if (!overlay || !panel || !content) { releaseScrollLock(); done(); return; }
+
+    activeTimeline?.kill();
+
+    if (prefersReducedMotion()) {
+        gsap.to(overlay, {
+            opacity: 0,
+            duration: 0.12,
+            onComplete: () => { releaseScrollLock(); done(); },
+        });
+        return;
+    }
+
     const origin = !props.disableOriginAnimation ? getOriginEl() : null; 
     const pRect = panel.getBoundingClientRect(); 
  
@@ -386,19 +389,16 @@ function onOverlayLeave(el: Element, done: () => void) {
     tl.to(overlay, { opacity: 0, duration: 0.28, ease: 'power2.in' }, 0.22); 
 } 
  
-/* ---------- Scroll lock + focus management ---------- */ 
-let previousOverflow = ''; 
-let previousPaddingRight = ''; 
-let previouslyFocused: HTMLElement | null = null; 
-let scrollLocked = false; 
- 
-function releaseScrollLock() { 
-    if (!scrollLocked) return; 
-    document.body.style.overflow = previousOverflow; 
-    document.body.style.paddingRight = previousPaddingRight; 
-    scrollLocked = false; 
-} 
- 
+/* ---------- Scroll lock + focus management ---------- */
+let previouslyFocused: HTMLElement | null = null;
+let scrollLocked = false;
+
+function releaseScrollLock() {
+    if (!scrollLocked) return;
+    scrollLocked = false;
+    unlockBodyScroll();
+}
+
 watch( 
     () => props.modelValue, 
     (open) => { 
@@ -407,16 +407,10 @@ watch(
             previouslyFocused = active; 
             capturedOrigin = active && active !== document.body ? active : null; 
  
-            if (props.lockScroll && !scrollLocked) { 
-                const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth; 
-                previousOverflow = document.body.style.overflow; 
-                previousPaddingRight = document.body.style.paddingRight; 
-                document.body.style.overflow = 'hidden'; 
-                if (scrollBarWidth > 0) { 
-                    document.body.style.paddingRight = `${scrollBarWidth}px`; 
-                } 
-                scrollLocked = true; 
-            } 
+            if (props.lockScroll && !scrollLocked) {
+                scrollLocked = true;
+                lockBodyScroll();
+            }
             emit('open'); 
             nextTick(() => { 
                 if (!panelRef.value) return; 
