@@ -39,8 +39,33 @@ export interface PopoverPosition {
     placement: PopoverPlacement;
 } 
  
-/** 
- * Headless composable para lógica de popover/dropdown: 
+/**
+ * Floor for the viewport cap. A trigger sitting a few pixels from the bottom
+ * edge would otherwise get a panel too short to show anything; below this we
+ * let the panel keep its own scroll instead.
+ */
+const MIN_PANEL_HEIGHT = 120;
+
+/**
+ * Content height of a panel, independent of any `max-height` we have already
+ * applied to it. `getBoundingClientRect()` reports the *constrained* height
+ * once capped, so it can't be used to decide whether the panel still needs a
+ * cap. The panel clips vertically and its inner wrapper is the scroll
+ * container, so that wrapper's `scrollHeight` (plus the panel's own vertical
+ * borders) is the height the panel would take if nothing constrained it.
+ */
+function naturalHeight(panel: HTMLElement): number {
+    const inner = panel.firstElementChild as HTMLElement | null;
+    if (!inner) return panel.getBoundingClientRect().height;
+    const styles = getComputedStyle(panel);
+    const borders =
+        Number.parseFloat(styles.borderTopWidth || '0')
+        + Number.parseFloat(styles.borderBottomWidth || '0');
+    return Math.max(inner.scrollHeight + borders, panel.getBoundingClientRect().height);
+}
+
+/**
+ * Headless composable para lógica de popover/dropdown:
  * - estado abierto/cerrado 
  * - click outside + Escape 
  * - posición absoluta relativa al viewport (para usar con `position: fixed`) 
@@ -89,22 +114,27 @@ export function usePopover(options: UsePopoverOptions = {}) {
         return style;
     }); 
  
-    function measure(): void { 
-        const trigger = triggerRef.value; 
-        const panel = panelRef.value; 
-        if (!trigger) return; 
- 
-        const initialPlacement = toValue(placementOption); 
-        const matchTriggerWidth = toValue(matchTriggerWidthOption); 
- 
-        const tRect = trigger.getBoundingClientRect(); 
-        const pRect = panel?.getBoundingClientRect(); 
-        const panelW = pRect?.width ?? tRect.width; 
-        const panelH = pRect?.height ?? 0; 
-        const vw = window.innerWidth; 
-        const vh = window.innerHeight; 
-        const margin = 8; 
- 
+    function measure(): void {
+        const trigger = triggerRef.value;
+        const panel = panelRef.value;
+        if (!trigger) return;
+
+        const initialPlacement = toValue(placementOption);
+        const matchTriggerWidth = toValue(matchTriggerWidthOption);
+
+        const tRect = trigger.getBoundingClientRect();
+        const pRect = panel?.getBoundingClientRect();
+        const panelW = pRect?.width ?? tRect.width;
+        // Height the panel *wants*, ignoring any cap we applied on a previous
+        // pass. The panel clips its own overflow, so its scroll container holds
+        // the real content height — without this, once we cap the panel its
+        // measured height equals the cap and every later decision (flip, fit)
+        // would be made against our own constraint instead of the content.
+        const panelH = panel ? naturalHeight(panel) : 0;
+        const vw = window.innerWidth;
+        const vh = window.innerHeight;
+        const margin = 8;
+
         let resolved: PopoverPlacement = initialPlacement; 
  
         // Vertical flip check. 
@@ -119,11 +149,29 @@ export function usePopover(options: UsePopoverOptions = {}) {
             } 
         } 
  
-        const isBottom = resolved.startsWith('bottom'); 
-        const align = resolved.split('-')[1] as 'start' | 'end' | 'center'; 
- 
-        let top = isBottom ? tRect.bottom + offset : tRect.top - panelH - offset; 
- 
+        const isBottom = resolved.startsWith('bottom');
+        const align = resolved.split('-')[1] as 'start' | 'end' | 'center';
+
+        // Vertical clamp: the panel may never grow past the edge of the
+        // viewport, so cap it to whatever room the resolved side leaves. This
+        // is applied unconditionally — capping only when the panel currently
+        // overflows would make the cap oscillate: capped panel measures as
+        // "fits", cap drops, content grows back past the edge, repeat.
+        const availableH = isBottom
+            ? vh - margin - (tRect.bottom + offset)
+            : tRect.top - offset - margin;
+        // A trigger scrolled past the edge of the viewport reports space that
+        // does not exist on screen (`closeOnScroll: false` keeps the popover
+        // open in exactly that state), so the room on the chosen side is not
+        // enough on its own — the panel can never be taller than the viewport.
+        const maxHeight = Math.max(
+            Math.min(availableH, vh - margin * 2),
+            MIN_PANEL_HEIGHT,
+        );
+        const renderedH = Math.min(panelH, maxHeight);
+
+        let top = isBottom ? tRect.bottom + offset : tRect.top - renderedH - offset;
+
         let left: number; 
         if (align === 'start') left = tRect.left; 
         else if (align === 'end') left = tRect.right - panelW; 
@@ -133,24 +181,18 @@ export function usePopover(options: UsePopoverOptions = {}) {
         if (left + panelW > vw - margin) left = vw - panelW - margin; 
         if (left < margin) left = margin; 
  
-        // Vertical clamp: if panel taller than available space, cap it so it stays in viewport.
-        const availableH = isBottom
-            ? vh - margin - (tRect.bottom + offset)
-            : tRect.top - offset - margin;
-        const clampedMaxH = panelH > availableH ? Math.max(availableH, 120) : undefined;
-
-        if (top + panelH > vh - margin) top = Math.max(margin, vh - panelH - margin);
+        if (top + renderedH > vh - margin) top = Math.max(margin, vh - renderedH - margin);
         if (top < margin) top = margin;
 
         position.value = {
             top,
             left,
             width: matchTriggerWidth ? tRect.width : undefined,
-            maxHeight: clampedMaxH,
+            maxHeight,
             placement: resolved,
-        }; 
-    } 
- 
+        };
+    }
+
     /* ---------- API ---------- */ 
  
     function open() { 
@@ -229,8 +271,20 @@ export function usePopover(options: UsePopoverOptions = {}) {
         close();
     }
  
-    let resizeObserver: ResizeObserver | null = null; 
- 
+    let resizeObserver: ResizeObserver | null = null;
+
+    /**
+     * Observe the panel *and* its scroll container. The panel itself stops
+     * changing size once it hits the viewport cap, so growing content (async
+     * search results, a longer list) would never notify us if we only watched
+     * the outer box.
+     */
+    function observePanel(el: HTMLElement): void {
+        resizeObserver?.observe(el);
+        const inner = el.firstElementChild;
+        if (inner instanceof HTMLElement) resizeObserver?.observe(inner);
+    }
+
     watch(isOpen, (open) => { 
         if (open) { 
             document.addEventListener('pointerdown', onDocumentPointerDown, true); 
@@ -240,10 +294,10 @@ export function usePopover(options: UsePopoverOptions = {}) {
             window.addEventListener('scroll', onWindowScroll, true); 
             window.addEventListener('resize', onScrollOrResize); 
             if (triggerRef.value && typeof ResizeObserver !== 'undefined') { 
-                resizeObserver = new ResizeObserver(onScrollOrResize); 
-                resizeObserver.observe(triggerRef.value); 
-                if (panelRef.value) resizeObserver.observe(panelRef.value); 
-            } 
+                resizeObserver = new ResizeObserver(onScrollOrResize);
+                resizeObserver.observe(triggerRef.value);
+                if (panelRef.value) observePanel(panelRef.value);
+            }
         } else { 
             document.removeEventListener('pointerdown', onDocumentPointerDown, true); 
             document.removeEventListener('keydown', onDocumentKeyDown); 
@@ -255,9 +309,9 @@ export function usePopover(options: UsePopoverOptions = {}) {
     }); 
  
     // Si el panel se monta después de open, vincularlo al ResizeObserver. 
-    watch(panelRef, (el) => { 
-        if (isOpen.value && el && resizeObserver) resizeObserver.observe(el); 
-    }); 
+    watch(panelRef, (el) => {
+        if (isOpen.value && el && resizeObserver) observePanel(el);
+    });
  
     // Re-measure when reactive placement / matchTriggerWidth options change 
     // while the popover is open (allows playgrounds to switch placement live). 

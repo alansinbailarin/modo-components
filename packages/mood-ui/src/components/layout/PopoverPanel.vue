@@ -11,15 +11,21 @@
                 :aria-labelledby="labelledBy" 
                 :style="mergedStyle" 
                 :class="[
-                    'modo-popover bg-popover text-popover-foreground border border-border shadow-lg',
+                    'modo-popover flex flex-col overflow-hidden bg-popover text-popover-foreground border border-border shadow-lg',
                     radiusClass,
                     $attrs.class,
-                ]" 
-                :data-modo-theme="scopedTheme || undefined" 
-            > 
-                <div :class="['modo-popover-inner overflow-x-hidden overflow-y-auto', radiusClass]">
+                ]"
+                :data-modo-theme="scopedTheme || undefined"
+            >
+                <!--
+                    `min-h-0` is what makes the panel's max-height actually bite:
+                    as a flex child this wrapper defaults to min-height:auto and
+                    refuses to shrink below its content, so it would render past
+                    the capped panel instead of scrolling inside it.
+                -->
+                <div :class="['modo-popover-inner min-h-0 flex-1 overflow-x-hidden overflow-y-auto', radiusClass]">
                     <slot />
-                </div> 
+                </div>
             </div> 
         </Transition> 
     </Teleport> 
