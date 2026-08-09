@@ -8,6 +8,7 @@
     @focusin="onTriggerFocus"
     @focusout="onTriggerBlur"
     @click="onTriggerClick"
+    @touchmove.passive="onTouchScroll"
   >
     <slot />
   </span>
@@ -78,6 +79,11 @@ import {
   pickForegroundOklch,
 } from "../../config/colorPrimitives";
 import { surfacesToCssVars } from "../../config/surfaces";
+import {
+  TOOLTIP_ARROW_SIZE,
+  tooltipArrowCross,
+  tooltipArrowInset,
+} from "../../utils/tooltipArrow";
 import type { ModoColor, ModoRadius } from "../../config/ModoConfig";
 
 const props = withDefaults(defineProps<Tooltip>(), {
@@ -284,19 +290,16 @@ function measure() {
   if (top + panelH > vh - margin) top = vh - panelH - margin;
   if (top < margin) top = margin;
 
-  // Arrow position (apuntando al centro del trigger, dentro del panel).
-  let arrowCross: number | undefined;
-  if (axis2 === "top" || axis2 === "bottom") {
-    arrowCross = Math.min(
-      Math.max(tRect.left + tRect.width / 2 - left, 10),
-      panelW - 10,
-    );
-  } else {
-    arrowCross = Math.min(
-      Math.max(tRect.top + tRect.height / 2 - top, 10),
-      panelH - 10,
-    );
-  }
+  // Arrow centre (apuntando al centro del trigger, dentro del panel).
+  const isVerticalAxis = axis2 === "top" || axis2 === "bottom";
+  const edgeSize = isVerticalAxis ? panelW : panelH;
+  const arrowCross = tooltipArrowCross(
+    isVerticalAxis
+      ? tRect.left + tRect.width / 2 - left
+      : tRect.top + tRect.height / 2 - top,
+    edgeSize,
+    tooltipArrowInset(resolvedRadius.value, edgeSize),
+  );
 
   position.value = { top, left, placement, arrowCross };
 }
@@ -367,15 +370,19 @@ const arrowStyle = computed(() => {
   const { arrowCross, placement } = position.value;
   if (arrowCross === undefined) return {};
   const axis = placement.split("-")[0];
+  // `arrowCross` is where the arrow's centre goes; `left`/`top` place its
+  // leading edge, hence the half-size shift.
+  const cross = `${arrowCross - TOOLTIP_ARROW_SIZE / 2}px`;
+  const out = `-${TOOLTIP_ARROW_SIZE / 2}px`;
   switch (axis) {
     case "top": // panel above trigger → arrow on panel bottom
-      return { left: `${arrowCross}px`, bottom: "-4px" };
+      return { left: cross, bottom: out };
     case "bottom": // panel below trigger → arrow on panel top
-      return { left: `${arrowCross}px`, top: "-4px" };
+      return { left: cross, top: out };
     case "left": // panel left of trigger → arrow on panel right
-      return { top: `${arrowCross}px`, right: "-4px" };
+      return { top: cross, right: out };
     case "right": // panel right of trigger → arrow on panel left
-      return { top: `${arrowCross}px`, left: "-4px" };
+      return { top: cross, left: out };
   }
   return {};
 });
@@ -393,14 +400,35 @@ watch(
 
 let resizeObserver: ResizeObserver | null = null;
 
-function onOutsideTouch(e: TouchEvent) {
+function dismiss() {
+  if (!internalOpen.value) return;
+  internalOpen.value = false;
+  emit("update:open", false);
+  emit("hide");
+}
+
+function onOutsideTouch(e: Event) {
   if (!internalOpen.value) return;
   const target = e.target as Node | null;
   if (triggerRef.value?.contains(target)) return;
   if (panelRef.value?.contains(target)) return;
-  internalOpen.value = false;
-  emit("update:open", false);
-  emit("hide");
+  dismiss();
+}
+
+/**
+ * A touch drag is the page being scrolled. On a pointer device the tooltip
+ * follows the trigger because the cursor stays put and `mouseleave` ends it;
+ * on touch there is no cursor and no `mouseleave`, so repositioning on scroll
+ * left the tooltip riding the screen indefinitely. Cancel a pending open too:
+ * a tap that turns into a drag must not pop a tooltip mid-scroll.
+ *
+ * Gestures that start on the trigger never reach the document listener — touch
+ * events stay targeted at the element the finger landed on — which is why the
+ * trigger binds this as well.
+ */
+function onTouchScroll() {
+  clearTimers();
+  dismiss();
 }
 
 watch(isOpen, (open) => {
@@ -416,14 +444,18 @@ watch(isOpen, (open) => {
       resizeObserver.observe(triggerRef.value);
       if (panelRef.value) resizeObserver.observe(panelRef.value);
     }
-    // On touch devices, hover never fires mouseleave — close on outside tap.
-    if (hasHover.value) document.addEventListener("touchstart", onOutsideTouch, { passive: true });
+    // On touch devices there is no cursor to move away: nothing dismisses the
+    // tooltip on its own, whichever trigger opened it. An outside tap ends it,
+    // and so does scrolling the page.
+    document.addEventListener("touchstart", onOutsideTouch, { passive: true });
+    document.addEventListener("touchmove", onTouchScroll, { passive: true });
   } else {
     window.removeEventListener("scroll", onScrollOrResize, true);
     window.removeEventListener("resize", onScrollOrResize);
     resizeObserver?.disconnect();
     resizeObserver = null;
     document.removeEventListener("touchstart", onOutsideTouch);
+    document.removeEventListener("touchmove", onTouchScroll);
   }
 });
 
@@ -433,6 +465,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("resize", onScrollOrResize);
   resizeObserver?.disconnect();
   document.removeEventListener("touchstart", onOutsideTouch);
+  document.removeEventListener("touchmove", onTouchScroll);
 });
 
 /* ---------- Style maps ---------- */
