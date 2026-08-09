@@ -36,7 +36,10 @@
       </span>
       <span
         v-else-if="activeItem?.icon"
-        class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent/60 text-foreground"
+        :class="[
+          'shrink-0 inline-flex items-center justify-center w-9 h-9 bg-accent/60 text-foreground',
+          radiusClass,
+        ]"
       >
         <component :is="activeItem.icon" class="w-5 h-5" aria-hidden="true" />
       </span>
@@ -165,7 +168,10 @@
             <span
               v-else-if="item.icon"
               data-modo-switcher-iconwrap
-              class="shrink-0 inline-flex items-center justify-center w-9 h-9 rounded-md bg-accent/60 text-foreground"
+              :class="[
+                'shrink-0 inline-flex items-center justify-center w-9 h-9 bg-accent/60 text-foreground',
+                radiusClass,
+              ]"
             >
               <component :is="item.icon" class="w-5 h-5" aria-hidden="true" />
             </span>
