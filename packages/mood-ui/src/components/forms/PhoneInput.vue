@@ -580,7 +580,17 @@ function onSearchKeydown(e: KeyboardEvent) {
     closePopover();
     triggerRef.value?.focus?.();
   } else if (e.key === "Tab") {
+    // The search field lives inside a panel teleported to <body>, i.e. at the
+    // very end of the document. Letting the browser resolve Tab from there
+    // walks *past* the whole field — the number input sits earlier in the DOM
+    // and is never reached — so focus landed on whatever followed the panel
+    // while the panel was unmounting. Drive the destination explicitly:
+    // forwards continues into the number input, backwards returns to the flag
+    // trigger, which is the order the field reads in.
+    e.preventDefault();
     closePopover();
+    if (e.shiftKey) triggerRef.value?.focus?.();
+    else inputRef.value?.focus();
   }
 }
 
