@@ -163,6 +163,22 @@
         "description": "Cada release de mood-ui listado de más reciente a más antiguo. Versionado con SemVer, con detalles de nuevos componentes, fixes y breaking changes.",
         "intro": "Cada release listado de más reciente a más antiguo. Seguimos SemVer.",
         "releases": {
+          "v0.12.0": {
+            "title": "Correcciones en mobile y calendarios con scroll",
+            "items": [
+              "Nuevo: maxHeight en AgendaView, MonthView, DayView, WeekView y Scheduler — limita la altura del calendario y su contenido hace scroll interno. Los números son píxeles, los strings aceptan cualquier unidad CSS.",
+              "Corregido: los overlays ya no dejan overflow:hidden pegado en <body>. Modal y Drawer comparten un scroll lock con contador de referencias, así que cerrar uno de dos overlays abiertos ya no congela la página.",
+              "Corregido: los paneles de popover se limitan al viewport y hacen scroll internamente en vez de salirse de la pantalla, y siguen al contenido que crece después de abrirse.",
+              "Corregido: Combobox en touch — el dropdown sobrevive al auto-scroll que provoca enfocar el campo, así que los resultados aparecen al primer tap y no solo después de escribir. Las opciones vuelven a ser seleccionables con el dedo.",
+              "Corregido: SearchInput mantiene el foco mientras cargan los resultados — el campo ya no se deshabilita a mitad de la consulta — y el panel conserva los resultados en vez de colapsar a un spinner en cada tecla.",
+              "Corregido: PhoneInput — al salir con Tab del buscador de país el foco va al input del número, y con Shift+Tab regresa al selector de bandera.",
+              "Corregido: Tooltip en touch — un gesto de scroll lo cierra en vez de dejarlo flotando, y un tap fuera ahora también cierra los tooltips con trigger de click.",
+              "Corregido: la flecha del Tooltip queda centrada en su trigger y libre de las esquinas redondeadas, así que en tooltips pequeños ya no se ve como un diamante saliéndose del panel.",
+              "Corregido: los eventos del calendario quitan la regla de color izquierda con radius large y full, donde el border-radius la barría por la esquina y quedaba como media luna.",
+              "Corregido: los tiles de icono del Switcher siguen el radius resuelto en vez de un rounded-md fijo.",
+              "Corregido: DateTimePicker centra la opción seleccionada en su columna — se notaba sobre todo en timeOnly, donde quedaba detrás del label."
+            ]
+          },
           "v0.11.0": {
             "title": "Gráficas, MenuButton y un focus ring unificado",
             "items": [

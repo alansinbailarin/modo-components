@@ -163,6 +163,22 @@
         "description": "Every release of mood-ui listed newest first. SemVer-tracked, with highlights of new components, bug fixes and breaking changes.",
         "intro": "Every release listed newest first. We follow SemVer.",
         "releases": {
+          "v0.12.0": {
+            "title": "Mobile fixes & scrollable calendars",
+            "items": [
+              "New: maxHeight on AgendaView, MonthView, DayView, WeekView and Scheduler — cap a calendar's height and its body scrolls internally. Numbers are pixels, strings take any CSS unit.",
+              "Fixed: overlays no longer strand overflow:hidden on <body>. Modal and Drawer share a reference-counted scroll lock, so closing one of two open overlays no longer freezes the page.",
+              "Fixed: popover panels are capped to the viewport and scroll inside themselves instead of running off-screen, and they keep up with content that grows after opening.",
+              "Fixed: Combobox on touch — the dropdown survives the auto-scroll that focusing the field causes, so results show on the first tap instead of only after typing. Options are tappable again.",
+              "Fixed: SearchInput keeps focus while results load — the field is no longer disabled mid-query — and the panel keeps the results it has instead of collapsing to a spinner on every keystroke.",
+              "Fixed: PhoneInput — Tab out of the country search lands on the number input, Shift+Tab returns to the flag trigger.",
+              "Fixed: Tooltip on touch — a scroll gesture dismisses it instead of leaving it floating, and an outside tap now closes click-triggered tooltips too.",
+              "Fixed: the Tooltip arrow is centred on its trigger and keeps clear of rounded corners, so a small tooltip no longer shows it as a diamond poking out of the panel.",
+              "Fixed: calendar events drop the left colour rule at large and full radius, where border-radius swept it around the corner into a crescent.",
+              "Fixed: Switcher icon tiles follow the resolved radius instead of a hardcoded rounded-md.",
+              "Fixed: DateTimePicker centres the selected option in its column — most visible in timeOnly, where it sat behind the column label."
+            ]
+          },
           "v0.11.0": {
             "title": "Charts, MenuButton & a unified focus ring",
             "items": [
