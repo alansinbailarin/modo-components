@@ -112,7 +112,14 @@
                     :select="selectResult"
                     :close="closePopover"
                 >
-                    <div v-if="loading" class="px-3 py-6 flex items-center justify-center">
+                    <!--
+                        The panel loader only takes over when there is nothing
+                        to show yet. Swapping a populated list for a spinner on
+                        every keystroke makes the dropdown collapse and reopen
+                        as the user types; the affordance spinner in the field
+                        already signals the in-flight request.
+                    -->
+                    <div v-if="loading && !resultItems.length" class="px-3 py-6 flex items-center justify-center">
                         <slot name="loading"><Loader size="small" /></slot>
                     </div>
                     <div
@@ -121,7 +128,13 @@
                     >
                         <slot name="empty">{{ emptyText }}</slot>
                     </div>
-                    <ul v-else :id="`${fieldId}-results`" role="listbox" class="flex flex-col">
+                    <ul
+                        v-else
+                        :id="`${fieldId}-results`"
+                        role="listbox"
+                        :aria-busy="loading || undefined"
+                        class="flex flex-col"
+                    >
                         <template v-for="row in renderRows" :key="row.key">
                             <li
                                 v-if="row.kind === 'header'"
@@ -281,8 +294,7 @@ const {
     stateColor, 
     hasError, 
     hasValue, 
-    isDisabled, 
-    currentLength, 
+    currentLength,
     showCounterEffective, 
     counterOverflow, 
     errorId, 
@@ -298,6 +310,14 @@ const { wrapperVariantClasses, radiusClasses } = useFieldClasses({
     radius, 
     halo: () => props.halo, 
 }); 
+
+// Deliberately NOT `useFieldState`'s `isDisabled`, which also reports true
+// while `loading`. That is right for a field being submitted, but fatal for a
+// search box: the results are what load, not the input. Disabling it mid-query
+// makes the browser blur the element the user is typing in — focus is lost, the
+// results popover closes, and the next keystroke is dropped. For SearchInput,
+// only an explicit `disabled` disables.
+const isDisabled = computed(() => !!props.disabled);
 
 const affordanceIconClass = computed(() => FIELD_AFFORDANCE_ICON_BY_COLOR[stateColor.value] ?? 'text-muted-foreground');
 const affordanceActionClass = computed(() => FIELD_AFFORDANCE_ACTION_BY_COLOR[stateColor.value] ?? 'text-muted-foreground hover:text-foreground');
@@ -456,10 +476,10 @@ function onFocus(e: FocusEvent) {
     if (hasDropdown.value) nextTick(syncOpen);
 }
  
-function onBlur(e: FocusEvent) { 
-    focused.value = false; 
-    emit('blur', e); 
-} 
+function onBlur(e: FocusEvent) {
+    focused.value = false;
+    emit('blur', e);
+}
  
 function onClear() { 
     cancelDebounce(); 
