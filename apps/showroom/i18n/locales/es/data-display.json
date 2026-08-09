@@ -89,7 +89,8 @@
           "highlightedDates": "Fechas resaltadas visualmente.",
           "disabledDates": "Fechas deshabilitadas.",
           "bordered": "Dibuja borde alrededor del contenedor.",
-          "loadMoreChunk": "Número de días añadidos al cargar más eventos."
+          "loadMoreChunk": "Número de días añadidos al cargar más eventos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el rango visible.",
@@ -563,7 +564,8 @@
           "bordered": "Dibuja borde alrededor de la grilla.",
           "draggableEvents": "Permite arrastrar eventos.",
           "resizableEvents": "Permite redimensionar eventos.",
-          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el día visible.",
@@ -681,7 +683,8 @@
           "minDateMaxDate": "Limita el rango de fechas seleccionables.",
           "disabledDates": "Fechas individuales deshabilitadas.",
           "disabledDaysOfWeek": "Días de la semana deshabilitados (0-6).",
-          "draggableEvents": "Permite arrastrar eventos entre días."
+          "draggableEvents": "Permite arrastrar eventos entre días.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al seleccionar un día.",
@@ -750,7 +753,8 @@
           "useResourceColor": "Aplica el color del recurso a sus eventos cuando no tienen color propio.",
           "draggableEvents": "Permite arrastrar eventos.",
           "allowCrossResourceDrag": "Permite mover eventos entre recursos al arrastrarlos.",
-          "resizableEvents": "Permite redimensionar eventos."
+          "resizableEvents": "Permite redimensionar eventos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el día visible.",
@@ -1145,7 +1149,8 @@
           "bordered": "Dibuja borde alrededor de la grilla.",
           "draggableEvents": "Permite arrastrar eventos.",
           "resizableEvents": "Permite redimensionar eventos.",
-          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar la semana visible.",
@@ -1318,7 +1323,8 @@
           "highlightedDates": "Fechas resaltadas visualmente.",
           "disabledDates": "Fechas deshabilitadas.",
           "bordered": "Dibuja borde alrededor del contenedor.",
-          "loadMoreChunk": "Número de días añadidos al cargar más eventos."
+          "loadMoreChunk": "Número de días añadidos al cargar más eventos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el rango visible.",
@@ -1735,7 +1741,8 @@
           "bordered": "Dibuja borde alrededor de la grilla.",
           "draggableEvents": "Permite arrastrar eventos.",
           "resizableEvents": "Permite redimensionar eventos.",
-          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el día visible.",
@@ -1845,7 +1852,8 @@
           "minDateMaxDate": "Limita el rango de fechas seleccionables.",
           "disabledDates": "Fechas individuales deshabilitadas.",
           "disabledDaysOfWeek": "Días de la semana deshabilitados (0-6).",
-          "draggableEvents": "Permite arrastrar eventos entre días."
+          "draggableEvents": "Permite arrastrar eventos entre días.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al seleccionar un día.",
@@ -1910,7 +1918,8 @@
           "useResourceColor": "Aplica el color del recurso a sus eventos cuando no tienen color propio.",
           "draggableEvents": "Permite arrastrar eventos.",
           "allowCrossResourceDrag": "Permite mover eventos entre recursos al arrastrarlos.",
-          "resizableEvents": "Permite redimensionar eventos."
+          "resizableEvents": "Permite redimensionar eventos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar el día visible.",
@@ -2264,7 +2273,8 @@
           "bordered": "Dibuja borde alrededor de la grilla.",
           "draggableEvents": "Permite arrastrar eventos.",
           "resizableEvents": "Permite redimensionar eventos.",
-          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos."
+          "allowRangeSelection": "Permite seleccionar un rango arrastrando sobre slots vacíos.",
+          "maxHeight": "Limita la altura de la vista para que su contenido haga scroll interno en vez de crecer. Los números son píxeles; los strings aceptan cualquier unidad CSS."
         },
         "emits": {
           "updateModelValue": "Emitido al cambiar la semana visible.",

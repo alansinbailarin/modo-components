@@ -291,6 +291,11 @@ const propsList = computed<PropDoc[]>(() => [
     description: t("pages.data-display.dayView.props.bordered"),
   },
   {
+    name: "maxHeight",
+    type: "number | string",
+    description: t("pages.data-display.dayView.props.maxHeight"),
+  },
+  {
     name: "draggableEvents",
     type: "boolean",
     default: "false",

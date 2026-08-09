@@ -331,6 +331,11 @@ const propsList = computed<PropDoc[]>(() => [
     description: t("pages.data-display.monthView.props.bordered"),
   },
   {
+    name: "maxHeight",
+    type: "number | string",
+    description: t("pages.data-display.monthView.props.maxHeight"),
+  },
+  {
     name: "highlightWeekends",
     type: "boolean",
     default: "false",

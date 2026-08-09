@@ -8,6 +8,11 @@ export interface DayView {
     color?: 'default' | 'primary' | 'danger' | 'success' | 'warning'; 
     radius?: 'none' | 'small' | 'medium' | 'large' | 'full'; 
     bordered?: boolean; 
+    /**
+     * Caps the view's height so its body scrolls internally instead of growing
+     * with the content. Bare numbers are pixels; strings take any CSS unit.
+     */
+    maxHeight?: number | string;
     minDate?: Date; 
     maxDate?: Date; 
     dayNameFormat?: 'narrow' | 'short' | 'long'; 

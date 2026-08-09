@@ -3,6 +3,7 @@
         ref="rootRef" 
         tabindex="-1" 
         :class="['relative flex flex-col bg-card overflow-hidden focus:outline-none', containerRadiusClass, bordered ? 'border border-border' : '']" 
+        :style="{ maxHeight: toCssLength(maxHeight) }"
         @keydown="handleKeydown" 
     > 
         <slot name="header" :label="headerLabel" :goToToday="handleToday" :prev="handlePrev" :next="handleNext" :prevYear="handlePrevYear" :nextYear="handleNextYear"> 
@@ -130,6 +131,8 @@ import CalendarHeader from './CalendarHeader.vue';
 import type { AgendaView } from '../../../interfaces/data-display/calendar/AgendaView.interface'; 
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
+import { toCssLength } from '../../../utils/cssLength';
+
 const props = withDefaults(defineProps<AgendaView>(), { 
     modelValue: () => new Date(), 
     events: () => [], 

@@ -3,6 +3,7 @@
         ref="rootRef" 
         tabindex="-1" 
         :class="['flex flex-col bg-card overflow-hidden focus:outline-none', containerRadiusClass, bordered ? 'border border-border' : '']" 
+        :style="{ maxHeight: toCssLength(maxHeight) }"
         @keydown="handleKeydown" 
     > 
         <slot name="header" :monthLabel="monthLabel" :year="currentYear" :goToToday="handleToday" :prev="handlePrevMonth" :next="handleNextMonth"> 
@@ -55,7 +56,12 @@
             </div> 
         </div> 
  
-        <div ref="gridRef" class="flex-1 flex flex-col"> 
+        <!--
+            The week rows keep their `min-h-24`, so a capped `maxHeight` has to
+            scroll here rather than clip against the root's `overflow-hidden`.
+            With no cap there is nothing to overflow and no scrollbar appears.
+        -->
+        <div ref="gridRef" class="flex-1 flex flex-col overflow-y-auto">
             <div 
                 v-for="(week, wIdx) in weeksData" 
                 :key="wIdx" 
@@ -146,7 +152,7 @@
                             'absolute z-10 truncate text-xs px-1.5 flex items-center cursor-pointer transition-opacity hover:opacity-80 select-none', 
                             eventRadiusClass, 
                             draggableEvents ? 'cursor-grab active:cursor-grabbing' : '', 
-                            eventColorClass(seg.event.color), 
+                            eventColorClass(seg.event.color, showEventAccent), 
                             draggingId === seg.event.id ? 'opacity-50' : '', 
                         ]" 
                     > 
@@ -181,6 +187,8 @@ import CalendarEventTooltip from './CalendarEventTooltip.vue';
 import CalendarHeader from './CalendarHeader.vue'; 
 import type { MonthView, CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
+import { toCssLength } from '../../../utils/cssLength';
+
 const props = withDefaults(defineProps<MonthView>(), { 
     modelValue: () => new Date(), 
     events: () => [], 
@@ -676,6 +684,7 @@ const {
     focusRingColorClass, 
     containerRadiusClass, 
     eventRadiusClass, 
+    showEventAccent, 
     pillRadiusClass, 
     dayNameCaseClass, 
 } = useCalendarTheme({ 

@@ -3,6 +3,7 @@
         ref="rootRef" 
         tabindex="-1" 
         :class="['relative flex flex-col bg-card overflow-hidden focus:outline-none', containerRadiusClass, bordered ? 'border border-border' : '']" 
+        :style="{ maxHeight: toCssLength(maxHeight) }"
         @keydown="handleKeydown" 
     > 
         <slot name="header" :label="headerLabel" :goToToday="handleToday" :prev="handlePrev" :next="handleNext" :prevYear="handlePrevYear" :nextYear="handleNextYear"> 
@@ -80,7 +81,7 @@
                         'absolute z-10 truncate text-xs px-1.5 flex items-center cursor-pointer transition-all hover:opacity-80 select-none', 
                         eventRadiusClass, 
                         draggableEvents ? 'cursor-grab active:cursor-grabbing' : '', 
-                        seg.event.colorHex ? '' : eventColorClass(seg.event.color), 
+                        seg.event.colorHex ? '' : eventColorClass(seg.event.color, showEventAccent), 
                         draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
                     ]" 
                 > 
@@ -165,7 +166,7 @@
                             eventRadiusClass, 
                             isEventInteractive(seg.event) ? 'cursor-pointer' : 'cursor-default', 
                             draggableEvents && isEventInteractive(seg.event) ? 'cursor-grab active:cursor-grabbing' : '', 
-                            seg.event.colorHex ? 'border-l-2' : eventColorClass(seg.event.color), 
+                            seg.event.colorHex ? (showEventAccent ? 'border-l-2' : '') : eventColorClass(seg.event.color, showEventAccent), 
                             draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
                         ]" 
                     > 
@@ -247,6 +248,8 @@ import type { DayView } from '../../../interfaces/data-display/calendar/DayView.
 import type { BusinessHours } from '../../../interfaces/data-display/calendar/WeekView.interface'; 
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
+import { toCssLength } from '../../../utils/cssLength';
+
 const props = withDefaults(defineProps<DayView>(), { 
     modelValue: () => new Date(), 
     events: () => [], 
@@ -988,6 +991,7 @@ const {
     focusRingColorClass, 
     containerRadiusClass, 
     eventRadiusClass, 
+    showEventAccent, 
     pillRadiusClass, 
     dayNameCaseClass, 
     resolvedColor, 

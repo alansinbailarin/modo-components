@@ -24,6 +24,11 @@ export interface MonthView {
     fixedWeeks?: boolean; 
     showHeader?: boolean; 
     bordered?: boolean; 
+    /**
+     * Caps the view's height so its body scrolls internally instead of growing
+     * with the content. Bare numbers are pixels; strings take any CSS unit.
+     */
+    maxHeight?: number | string;
     keyboardNavigation?: boolean; 
     minDate?: Date; 
     maxDate?: Date; 

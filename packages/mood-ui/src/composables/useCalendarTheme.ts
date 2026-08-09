@@ -18,8 +18,10 @@ export interface CalendarTheme {
     focusRingColorClass: ComputedRef<string>; 
     highlightDotClass: ComputedRef<string>; 
     containerRadiusClass: ComputedRef<string>; 
-    eventRadiusClass: ComputedRef<string>; 
-    pillRadiusClass: ComputedRef<string>; 
+    eventRadiusClass: ComputedRef<string>;
+    /** Whether an event's left colour rule reads as a bar at the current radius. */
+    showEventAccent: ComputedRef<boolean>;
+    pillRadiusClass: ComputedRef<string>;
     dayNameCaseClass: ComputedRef<string>; 
     resolvedColor: ComputedRef<CalendarColor>; 
 } 
@@ -88,7 +90,16 @@ const PILL: Record<CalendarRadius, string> = {
     full: 'rounded-full', 
 }; 
  
-const DAY_NAME_CASE: Record<DayNameCase, string> = { 
+/**
+ * Radii at which an event still has enough straight left edge to carry the
+ * colour rule. Past these, `border-radius` sweeps the one-sided border around
+ * the corner arc and it renders as a crescent hugging the side of the event
+ * instead of a bar; the translucent fill and the text colour carry the event
+ * colour on their own there.
+ */
+const EVENT_ACCENT_RADII: CalendarRadius[] = ['none', 'small', 'medium'];
+
+const DAY_NAME_CASE: Record<DayNameCase, string> = {
     upper: 'uppercase', 
     lower: 'lowercase', 
     capitalize: 'capitalize', 
@@ -114,7 +125,8 @@ export function useCalendarTheme(input: CalendarThemeInput): CalendarTheme {
     const highlightDotClass = computed(() => DOT[resolvedColor.value] ?? DOT.default); 
     const containerRadiusClass = computed(() => CONTAINER[resolvedRadius.value] ?? CONTAINER.large); 
     const eventRadiusClass = computed(() => EVENT[resolvedRadius.value] ?? EVENT.small); 
-    const pillRadiusClass = computed(() => PILL[resolvedRadius.value] ?? PILL.full); 
+    const pillRadiusClass = computed(() => PILL[resolvedRadius.value] ?? PILL.full);
+    const showEventAccent = computed(() => EVENT_ACCENT_RADII.includes(resolvedRadius.value));
     const dayNameCaseClass = computed(() => DAY_NAME_CASE[input.dayNameCase?.() ?? 'upper'] ?? DAY_NAME_CASE.upper); 
  
     return { 
@@ -123,9 +135,10 @@ export function useCalendarTheme(input: CalendarThemeInput): CalendarTheme {
         rangeSelectClass, 
         focusRingColorClass, 
         highlightDotClass, 
-        containerRadiusClass, 
-        eventRadiusClass, 
-        pillRadiusClass, 
+        containerRadiusClass,
+        eventRadiusClass,
+        showEventAccent,
+        pillRadiusClass,
         dayNameCaseClass, 
         resolvedColor, 
     }; 

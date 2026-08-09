@@ -89,7 +89,8 @@
           "highlightedDates": "Visually highlighted dates.",
           "disabledDates": "Disabled dates.",
           "bordered": "Draws a border around the container.",
-          "loadMoreChunk": "Number of days added when loading more events."
+          "loadMoreChunk": "Number of days added when loading more events.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible range changes.",
@@ -563,7 +564,8 @@
           "bordered": "Draws a border around the grid.",
           "draggableEvents": "Allows dragging events.",
           "resizableEvents": "Allows resizing events.",
-          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible day changes.",
@@ -681,7 +683,8 @@
           "minDateMaxDate": "Limits the range of selectable dates.",
           "disabledDates": "Individual disabled dates.",
           "disabledDaysOfWeek": "Disabled days of the week (0-6).",
-          "draggableEvents": "Allows dragging events between days."
+          "draggableEvents": "Allows dragging events between days.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when a day is selected.",
@@ -750,7 +753,8 @@
           "useResourceColor": "Applies the resource color to its events when they have no own color.",
           "draggableEvents": "Allows dragging events.",
           "allowCrossResourceDrag": "Allows moving events between resources by dragging.",
-          "resizableEvents": "Allows resizing events."
+          "resizableEvents": "Allows resizing events.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible day changes.",
@@ -1145,7 +1149,8 @@
           "bordered": "Draws a border around the grid.",
           "draggableEvents": "Allows dragging events.",
           "resizableEvents": "Allows resizing events.",
-          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible week changes.",
@@ -1318,7 +1323,8 @@
           "highlightedDates": "Visually highlighted dates.",
           "disabledDates": "Disabled dates.",
           "bordered": "Draws a border around the container.",
-          "loadMoreChunk": "Number of days added when loading more events."
+          "loadMoreChunk": "Number of days added when loading more events.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible range changes.",
@@ -1735,7 +1741,8 @@
           "bordered": "Draws a border around the grid.",
           "draggableEvents": "Allows dragging events.",
           "resizableEvents": "Allows resizing events.",
-          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible day changes.",
@@ -1845,7 +1852,8 @@
           "minDateMaxDate": "Limits the range of selectable dates.",
           "disabledDates": "Individual disabled dates.",
           "disabledDaysOfWeek": "Disabled days of the week (0-6).",
-          "draggableEvents": "Allows dragging events between days."
+          "draggableEvents": "Allows dragging events between days.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when a day is selected.",
@@ -1910,7 +1918,8 @@
           "useResourceColor": "Applies the resource color to its events when they have no own color.",
           "draggableEvents": "Allows dragging events.",
           "allowCrossResourceDrag": "Allows moving events between resources by dragging.",
-          "resizableEvents": "Allows resizing events."
+          "resizableEvents": "Allows resizing events.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible day changes.",
@@ -2264,7 +2273,8 @@
           "bordered": "Draws a border around the grid.",
           "draggableEvents": "Allows dragging events.",
           "resizableEvents": "Allows resizing events.",
-          "allowRangeSelection": "Allows selecting a range by dragging over empty slots."
+          "allowRangeSelection": "Allows selecting a range by dragging over empty slots.",
+          "maxHeight": "Caps the view's height so its body scrolls internally instead of growing with the content. Numbers are pixels; strings take any CSS unit."
         },
         "emits": {
           "updateModelValue": "Emitted when the visible week changes.",

@@ -3,6 +3,7 @@
         ref="rootRef" 
         tabindex="-1" 
         :class="['relative flex flex-col bg-card overflow-hidden focus:outline-none isolate', containerRadiusClass, bordered ? 'border border-border' : '']" 
+        :style="{ maxHeight: toCssLength(maxHeight) }"
         @keydown="handleKeydown" 
         @pointerdown="hasKeyboardFocus = false" 
     > 
@@ -131,7 +132,7 @@
                                 'absolute z-10 truncate text-xs px-1.5 flex items-center cursor-pointer transition-all hover:opacity-80 select-none', 
                                 eventRadiusClass, 
                                 draggableEvents ? 'cursor-grab active:cursor-grabbing' : '', 
-                                seg.event.colorHex ? '' : eventColorClass(seg.event.color), 
+                                seg.event.colorHex ? '' : eventColorClass(seg.event.color, showEventAccent), 
                                 draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
                             ]" 
                         > 
@@ -218,7 +219,7 @@
                             eventRadiusClass, 
                             isEventInteractive(seg.event) ? 'cursor-pointer' : 'cursor-default', 
                             draggableEvents && isEventInteractive(seg.event) ? 'cursor-grab active:cursor-grabbing' : '', 
-                            seg.event.colorHex ? 'border-l-2' : eventColorClass(seg.event.color), 
+                            seg.event.colorHex ? (showEventAccent ? 'border-l-2' : '') : eventColorClass(seg.event.color, showEventAccent), 
                             draggingId === seg.event.id ? 'opacity-70 scale-95' : '', 
                         ]" 
                     > 
@@ -304,6 +305,8 @@ import CalendarHeader from './CalendarHeader.vue';
 import type { WeekView, BusinessHours } from '../../../interfaces/data-display/calendar/WeekView.interface'; 
 import type { CalendarEvent } from '../../../interfaces/data-display/calendar/MonthView.interface'; 
  
+import { toCssLength } from '../../../utils/cssLength';
+
 const props = withDefaults(defineProps<WeekView>(), { 
     modelValue: () => new Date(), 
     events: () => [], 
@@ -1357,6 +1360,7 @@ const {
     highlightDotClass, 
     containerRadiusClass, 
     eventRadiusClass, 
+    showEventAccent, 
     pillRadiusClass, 
     dayNameCaseClass, 
     resolvedColor, 

@@ -290,6 +290,11 @@ const propsList = computed<PropDoc[]>(() => [
     description: t("pages.data-display.agendaView.props.bordered"),
   },
   {
+    name: "maxHeight",
+    type: "number | string",
+    description: t("pages.data-display.agendaView.props.maxHeight"),
+  },
+  {
     name: "loadMoreChunk",
     type: "number",
     description: t("pages.data-display.agendaView.props.loadMoreChunk"),

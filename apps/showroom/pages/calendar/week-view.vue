@@ -332,6 +332,11 @@ const propsList = computed<PropDoc[]>(() => [
     description: t("pages.data-display.weekView.props.bordered"),
   },
   {
+    name: "maxHeight",
+    type: "number | string",
+    description: t("pages.data-display.weekView.props.maxHeight"),
+  },
+  {
     name: "draggableEvents",
     type: "boolean",
     default: "false",
