@@ -144,6 +144,13 @@
             >
               {{ group.name }}
             </li>
+            <!--
+              `mousedown.prevent` keeps focus in the input while an option is
+              picked. There is deliberately no `touchstart.prevent` alongside
+              it: cancelling touchstart tells the browser to suppress the
+              compatibility mouse events *and* the click for that tap, so on a
+              touch device the option became impossible to select at all.
+            -->
             <li
               v-for="opt in group.items"
               :id="optionDomId(String(opt.value))"
@@ -162,7 +169,6 @@
               ]"
               @pointerenter="setActive(opt.value)"
               @mousedown.prevent
-              @touchstart.prevent
               @click="selectOption(opt)"
             >
               <component
@@ -468,6 +474,14 @@ const {
 } = usePopover({
   placement: "bottom-start",
   matchTriggerWidth: true,
+  // Reposition on scroll instead of closing. Focus is what opens this panel,
+  // and focusing a text field is itself a scroll trigger: on mobile the virtual
+  // keyboard appears and the browser scrolls the field into view a few frames
+  // after the panel opened, which closed the dropdown before the user could
+  // ever see it. Typing reopened it — by then the keyboard was already up and
+  // no further scroll followed — which is why the list only appeared after the
+  // first keystroke. Same reasoning as SearchInput.
+  closeOnScroll: false,
   onOpen: () => {
     emit("open");
     const initial =
