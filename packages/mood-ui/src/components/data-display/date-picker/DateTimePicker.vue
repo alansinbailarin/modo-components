@@ -316,8 +316,18 @@ const scrollColumnToSelected = (col: ColKey, animate = true) => {
     );
     if (!targetBtn) return;
     const apply = () => {
+      // Measured against the scroll container itself rather than
+      // `targetBtn.offsetTop`: the nearest positioned ancestor is the time
+      // panel wrapper, not this container, so offsetTop also carries the
+      // "Time" header and the column label. That constant error is what
+      // pushed the selected option up behind the hour/min label — most
+      // visible in `timeOnly`, where the column is only h-52 tall.
+      const offsetWithinScroller =
+        targetBtn.getBoundingClientRect().top
+        - container.getBoundingClientRect().top
+        + container.scrollTop;
       const targetTop =
-        targetBtn.offsetTop -
+        offsetWithinScroller -
         container.clientHeight / 2 +
         targetBtn.clientHeight / 2;
       if (animate) {
