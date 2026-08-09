@@ -671,16 +671,9 @@ defineExpose({ focusGrid });
 const resolvedColor = useResolvedColor(() => props.color); 
 const resolvedRadius = useResolvedRadius(() => props.radius); 
  
-const todayBgClass = computed(() => ({ 
-    default: 'bg-foreground text-background', 
-    primary: 'bg-primary text-primary-foreground', 
-    danger: 'bg-destructive text-destructive-foreground', 
-    success: 'bg-success text-success-foreground', 
-    warning: 'bg-warning text-warning-foreground', 
-}[resolvedColor.value] ?? 'bg-primary text-primary-foreground')); 
- 
 const { 
     todayTextClass, 
+    todayBgClass, 
     focusRingColorClass, 
     containerRadiusClass, 
     eventRadiusClass, 
