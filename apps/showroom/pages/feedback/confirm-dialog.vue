@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
-import { Button, ConfirmDialog, Typography, useConfirm, useToast } from "mood-ui";
+import { Button, Typography, useConfirm, useToast } from "mood-ui";
 import { useI18n } from "vue-i18n";
 import ComponentDoc from "~/components/ComponentDoc.vue";
 import CodePreview from "~/components/CodePreview.vue";
@@ -224,9 +224,9 @@ const slotsList: SlotDoc[] = [];
 </script>
 
 <template>
-  <!-- Mount global del host -->
-  <ConfirmDialog />
-
+  <!-- The host is mounted once in app.vue. Mounting a second one here made a
+       single confirm() render two stacked dialogs (and left the page's scroll
+       locked), which is exactly what this page tells people not to do. -->
   <ComponentDoc
     :title="t('pages.feedback.confirmDialog.title')"
     category="Feedback"
